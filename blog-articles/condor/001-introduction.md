@@ -76,51 +76,51 @@ The following summarises the new or renamed endpoints served by the various API 
 
     - **SSE (Server Side Events)**
 
-- Main.FinalitySignature
-- Main.Shutdown
-- Main.TransactionAccepted (rename)
-- Main.TransactionExpired (rename)
-- Main.TransactionProcessed (rename)
+        - Main.FinalitySignature
+        - Main.Shutdown
+        - Main.TransactionAccepted (rename)
+        - Main.TransactionExpired (rename)
+        - Main.TransactionProcessed (rename)
 
     - **Binary**
 
-- Get
-    - Record
-        - ApprovalsHashes
-        - BlockHeader
-        - BlockBody
-        - BlockMetadata
-        - ExecutionResult
-        - FinalizedTransactionApprovals
-        - Transaction
-        - Transfer
-    - Information
-        - AvailableBlockRange
-        - BlockHeader
-        - BlockSynchronizerStatus
-        - ChainspecRawBytes
-        - ConsensusStatus 
-        - ConsensusValidatorChanges
-        - LastProgress
-        - LatestSwitchBlockHeader
-        - NetworkName
-        - NextUpgrade
-        - NodeStatus
-        - Peers
-        - ReactorState
-        - SignedBlock
-        - Transaction
-        - Uptime
-    - State
-        - Balance
-        - DictionaryItem
-        - Item
-        - ItemsByPrefix
-        - AllItems
-        - Trie
-- Try
-    - AcceptTransaction
-    - SpeculativeExec
+        - Get
+            - Record
+                - ApprovalsHashes
+                - BlockHeader
+                - BlockBody
+                - BlockMetadata
+                - ExecutionResult
+                - FinalizedTransactionApprovals
+                - Transaction
+                - Transfer
+            - Information
+                - AvailableBlockRange
+                - BlockHeader
+                - BlockSynchronizerStatus
+                - ChainspecRawBytes
+                - ConsensusStatus 
+                - ConsensusValidatorChanges
+                - LastProgress
+                - LatestSwitchBlockHeader
+                - NetworkName
+                - NextUpgrade
+                - NodeStatus
+                - Peers
+                - ReactorState
+                - SignedBlock
+                - Transaction
+                - Uptime
+            - State
+                - Balance
+                - DictionaryItem
+                - Item
+                - ItemsByPrefix
+                - AllItems
+                - Trie
+        - Try
+            - AcceptTransaction
+            - SpeculativeExec
 
 - **Sidecar**
 
