@@ -68,7 +68,7 @@ Whilst changes to the API surface have been minimised, nevertheless there are se
 
 - JSON-RPC API endpoints have been added and/or renamed.   
 
-- Speculative Execution API has moved to sidecar.  
+- Speculative Execution API has been moved to sidecar.  
 
 The following summarises the new or renamed endpoints served by the various API servers at the time of writing.  We exclude the protocol endpoints as they are effectively internal to the system. 
 
@@ -76,51 +76,51 @@ The following summarises the new or renamed endpoints served by the various API 
 
     - **SSE (Server Side Events)**
 
-        - Main.FinalitySignature
-        - Main.Shutdown
-        - Main.TransactionAccepted (rename)
-        - Main.TransactionExpired (rename)
-        - Main.TransactionProcessed (rename)
+- Main.FinalitySignature
+- Main.Shutdown
+- Main.TransactionAccepted (rename)
+- Main.TransactionExpired (rename)
+- Main.TransactionProcessed (rename)
 
     - **Binary**
 
-        - Get
-            - Record
-                - ApprovalsHashes
-                - BlockHeader
-                - BlockBody
-                - BlockMetadata
-                - ExecutionResult
-                - FinalizedTransactionApprovals
-                - Transaction
-                - Transfer
-            - Information
-                - AvailableBlockRange
-                - BlockHeader
-                - BlockSynchronizerStatus
-                - ChainspecRawBytes
-                - ConsensusStatus 
-                - ConsensusValidatorChanges
-                - LastProgress
-                - LatestSwitchBlockHeader
-                - NetworkName
-                - NextUpgrade
-                - NodeStatus
-                - Peers
-                - ReactorState
-                - SignedBlock
-                - Transaction
-                - Uptime
-            - State
-                - Balance
-                - DictionaryItem
-                - Item
-                - ItemsByPrefix
-                - AllItems
-                - Trie
-        - Try
-            - AcceptTransaction
-            - SpeculativeExec
+- Get
+    - Record
+        - ApprovalsHashes
+        - BlockHeader
+        - BlockBody
+        - BlockMetadata
+        - ExecutionResult
+        - FinalizedTransactionApprovals
+        - Transaction
+        - Transfer
+    - Information
+        - AvailableBlockRange
+        - BlockHeader
+        - BlockSynchronizerStatus
+        - ChainspecRawBytes
+        - ConsensusStatus 
+        - ConsensusValidatorChanges
+        - LastProgress
+        - LatestSwitchBlockHeader
+        - NetworkName
+        - NextUpgrade
+        - NodeStatus
+        - Peers
+        - ReactorState
+        - SignedBlock
+        - Transaction
+        - Uptime
+    - State
+        - Balance
+        - DictionaryItem
+        - Item
+        - ItemsByPrefix
+        - AllItems
+        - Trie
+- Try
+    - AcceptTransaction
+    - SpeculativeExec
 
 - **Sidecar**
 
