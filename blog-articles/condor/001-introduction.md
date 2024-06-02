@@ -25,29 +25,29 @@ As before, with the exception of the node's protocol network port, an operator c
         - Mandatory
         - Default Port = 34553
 
-    - **REST**
+    - **REST Server**
         - Convenience API suitable for curl & browsers
         - Optional
         - Default Port = 8888
 
-    - **Binary**
+    - **Binary Server**
         - Rich API for dispatching transactions into the network and for querying the node and/or chain state
         - Optional
         - Default Port = 7777
 
-    - **SSE (Server Side Events)**
+    - **SSE (Server Side Events) Server**
         - Realtime API of events emitted by the node when processing blocks and/or transactions
         - Optional
         - Default Port = 9999
 
 - **Sidecar**
 
-    - **JSON-RPC: Main**
+    - **JSON-RPC Server: Main**
         - Rich API for dispatching transactions into the network and for querying chain/node state
         - Optional
         - Default Port = 7777
 
-    - **JSON-RPC: Speculative Execution**
+    - **JSON-RPC Server: Speculative Execution**
         - Specialized API for speculatively executing a transaction
         - Optional
         - Default Port = 7778
