@@ -12,7 +12,7 @@ Here you can
 
 ## Your Journey
 
-If you have any questions, comments or concerns then **your first point of call** should be reviewing the discussion threads.  If you do not see a relevant discussion then proceed to review the Wiki, FAQs, Issues, Articles ...etc.  If you still do not find the information that you are seeking then **OPEN A DISCUSSION THREAD**.
+If you have any questions, comments or concerns then **your first point of call** should be reviewing the [discussion forum](https://github.com/casper-network/condor-info/discussions).  If you do not see a relevant discussion then proceed to review the Wiki, FAQs, Issues, Articles ...etc.  If you still do not find the information that you are seeking then **OPEN A DISCUSSION THREAD**.
 
 ## Discussions
 
