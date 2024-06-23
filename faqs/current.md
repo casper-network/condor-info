@@ -1,15 +1,15 @@
-### What is condor?
+### What is Condor?
 Condor is the code name given to version 2.0 of the Casper platform, it represents a significant upgrade with a slew of new features accompanied by innumerable optimizations & improvements.
 
 ### What are the main components of Condor?
-casper-node: The core node software.
-casper-node-launcher: Manages node orchestration.
-casper-sidecar: New component for handling non-essential tasks like the JSON-RPC API.
+- casper-node: The core node software.
+- casper-node-launcher: Manages node orchestration.
+- casper-sidecar: New component for handling non-essential tasks like the JSON-RPC API.
 
 ### What are the benefits of decoupling essential and non-essential tasks?
-Enhanced control over performance and security.
-Independent evolution of the JSON-RPC API.
-Simplified development of alternative protocol clients.
+- Enhanced control over performance and security.
+- Independent evolution of the JSON-RPC API.
+- Simplified development of alternative protocol clients.
 
 ### Is there any limit for storing values within a contract?
 There is no physical limit on the total bytes written. However, the effective limit for storing data during a single contract call is determined by the gas limit. It currently costs 1,117,587 gas to write one byte to the global state, considering raw data only. Various weight multipliers and limits per operation, such as the maximum length of a dictionary item key, also apply. If you need more details, please let us know.
@@ -23,12 +23,12 @@ You can use the query_balance_details interface to check the gas held for a spec
 For more details, refer to the query_balance_details interface.
 
 ### What new services are available?
-Node: Protocol Server, REST Server, Binary Server, SSE Server.
-Sidecar: Main Server (JSON-RPC API), Speculative Execution Server.
+- Node: Protocol Server, REST Server, Binary Server, SSE Server.
+- Sidecar: Main Server (JSON-RPC API), Speculative Execution Server.
 
 ### What changes have been made to the API?
-Distributed across node and sidecar.
-Introduction of the node binary API.
-Rationalized SSE API.
-New and renamed JSON-RPC API endpoints.
+- Distributed across node and sidecar.
+- Introduction of the node binary API.
+- Rationalized SSE API.
+- New and renamed JSON-RPC API endpoints.
 
