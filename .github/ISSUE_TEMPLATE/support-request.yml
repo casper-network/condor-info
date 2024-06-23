@@ -1,5 +1,5 @@
-name: Condor Release Feedback / Issue Form
-description: Please share your feedback or issues you face in incorporating Condor Release changes in your application/project.
+name: Condor Support Request Form
+description: Use this form to specify detailed information about an issue you are having with Condor which requires technical support. 
 title: '[Condor-Release]: Specify your issue briefly'
 labels:
   - condor-issues
@@ -18,11 +18,11 @@ body:
       label: Category
       description: Please choose the category that best describes your needs.
       options:
-        - Bug
-        - Breaking Change
+        - Possible Bug
+        - Breaking Change/Compatibility Issue
         - Integration Issue
+        - Lack of documentation/Request for Information
         - Request for Tech Support
-        - Compatibility Issue
     validations:
       required: true
   - type: input
@@ -53,10 +53,23 @@ body:
     validations:
       required: true
   - type: dropdown
+    id: urgency
+    attributes:
+      label: Priority
+      description: Please let us know if this is a blocking issue to your integration efforts
+      options:
+        - Low
+        - Medium
+        - High
+        - Critical
+        - Blocking/Most Urgent
+    validations:
+      required: true
+  - type: dropdown
     id: node-functionality
     attributes:
       label: Node Functionality
-      description: Please specify the primary function of the node on the Casper Network related to the feedback or issue.
+      description: Please specify the area of the Condor software concerned
       options:
         - Node
         - JSON RPC
