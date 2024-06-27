@@ -1,0 +1,122 @@
+name: Condor Devnet Access Request Form
+description: Please use this form to submit an access request to Devnet. 
+title: '[Condor-Devnet-Access]: Please specify your project/org name'
+labels:
+  - condor-devnet-access
+assignees:
+  - melpadden
+  - sczembor
+  - sacherjj
+  - Marjan-sha
+  - piotr-dziubecki
+  - Adrian-Wrona
+  - SaiProServ
+  - cspramit
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Devnet is a controlled environment comprising 7 validating nodes, where the application/project will get an opportunity to test their changes against the Condor code base. 
+        It is developed to facilitate an early feedback loop for the teams/community.
+        Please use this form to submit an access request to Devnet. 
+  - type: dropdown
+    id: apptype
+    attributes:
+      label: AppCategory
+      description: Please choose the type that best describes your needs.
+      multiple: true
+      options:
+        - Bridge
+        - dApp
+        - DeFi
+        - Exchange
+        - Gaming
+        - NFT/Collectibles
+        - Validator
+        - Wallet
+    validations:
+      required: true
+  - type: input
+    id: email
+    attributes:
+      label: Your email address
+      placeholder: john@doe.com
+    validations:
+      required: true
+  - type: input
+    id: telegram
+    attributes:
+      label: Project/Org's Point of Contact Telegram handle
+      placeholder: '@johndoe'
+    validations:
+      required: true
+  - type: input
+    id: project-name
+    attributes:
+      label: Project / Application Name
+      placeholder: Your Project Here
+      description: Please specify your Project/Application Name
+    validations:
+      required: true
+  - type: dropdown
+    id: noderpc-sdk
+    attributes:
+      label: Node RPC or SDK
+      description: How do you plan to connect to Devnet? Do you intend to make direct calls to the Node RPC, use the SDK, or both?
+      multiple: true
+      options:
+        - Node RPC
+        - SDK
+    validations:
+      required: true
+  - type: dropdown
+    id: sdk
+    attributes:
+      label: SDK Usage
+      description:  If you are using an SDK, please specify which one. If you are using more than one, please select appropriately.
+      multiple: true
+      options:
+        - JavaScript
+        - C#
+        - Java
+        - Python
+        - Go
+        - PHP
+        - Rust
+    validations:
+      required: true
+  - type: dropdown
+    id: wasm-stored-contract
+    attributes:
+      label: Use of Stored Contracts or Custom WASM
+      description: Please indicate if you use any stored contracts or any other kind of custom WASM.
+      multiple: true
+      options:
+        - Custom WASM
+        - Stored Contracts
+        - None        
+    validations:
+      required: true
+  - type: textarea
+    id: custom-wasm-details
+    attributes:
+      label: Custom WASM Details
+      description: If you are using custom WASM on the network, please provide the details.
+    validations:
+      required: true
+  - type: input
+    id: public-key
+    attributes:
+      label: Devnet Public Key
+      placeholder: Please specify the public key hexadecimal value here
+      description: If you plan to test in Devnet, please share your Public Key in order to receive Devnet tokens. 
+    validations:
+      required: true
+  - type: input
+    id: target-date
+    attributes:
+      label: Expected Completion Date
+      placeholder: dd/mm/yyyy
+      description: Please indicate when you expect to complete your Condor changes.
+    validations:
+      required: false 
