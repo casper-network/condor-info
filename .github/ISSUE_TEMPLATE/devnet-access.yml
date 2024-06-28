@@ -94,7 +94,7 @@ body:
       options:
         - Custom WASM
         - Stored Contracts
-        - None        
+        - NA
     validations:
       required: true
   - type: textarea
@@ -119,4 +119,4 @@ body:
       placeholder: dd/mm/yyyy
       description: Please indicate when you expect to complete your Condor changes.
     validations:
-      required: false 
+      required: false
