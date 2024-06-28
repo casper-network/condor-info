@@ -72,7 +72,7 @@ To interact with your local Condor network, we'll use the Casper Client written 
    cargo run --release get-node-status --node-address http://127.0.0.1:11101
    ```
    This command should return the node status of your local network, indicating a successful setup. The output should look similar to this:
-```json
+```
 {
   "jsonrpc": "2.0",
   "id": -1220974167166441457,
