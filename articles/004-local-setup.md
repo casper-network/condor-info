@@ -54,7 +54,7 @@ NCTL is your tool for managing the Casper network. We'll use a Dockerized versio
 
 ## Part 2: Casper Client (Rust)
 
-To interact with your local Condor network, we'll use the Casper Client written in Rust. This is just one option. There are versions of the JS and .NET SDKs that are also becoming compatible with Condor.
+To interact with your local Condor network, we'll use the Casper Client written in Rust. This is just one option. There are other supported SDKs that are also becoming compatible with Condor.
 
 1. **Clone the Repository:**
    ```bash
@@ -69,9 +69,17 @@ To interact with your local Condor network, we'll use the Casper Client written 
 
 3. **Test Your Setup:**
    ```bash
-   cargo run --release get-state-root-hash --node-address http://127.0.0.1:11101
+   cargo run --release get-node-status --node-address http://127.0.0.1:11101
    ```
-   This command should return the current state root hash of your local network, indicating a successful connection.
+   This command should return the node status of your local network, indicating a successful setup. The output should look similar to this:
+```json
+{
+  "jsonrpc": "2.0",
+  "id": -1220974167166441457,
+  "result": {
+    "api_version": "2.0.0",
+  ...
+}
 
 ## Using the Casper Client
 
