@@ -52,6 +52,20 @@ NCTL is your tool for managing the Casper network. We'll use a Dockerized versio
       docker run -d --name mynctl -p 11101:11101 casper-nctl:feat-2.0
       ```
 
+      Once it is up and running you should see that there are 5 nodes and 5 sidecars running:
+     ```
+     mynctl  | validators-1:casper-net-1-node-1       RUNNING   pid 995, uptime 0:00:03
+     mynctl  | validators-1:casper-net-1-node-2       RUNNING   pid 997, uptime 0:00:03
+     mynctl  | validators-1:casper-net-1-node-3       RUNNING   pid 1007, uptime 0:00:03
+     mynctl  | validators-1:casper-net-1-sidecar-1    RUNNING   pid 996, uptime 0:00:03
+     mynctl  | validators-1:casper-net-1-sidecar-2    RUNNING   pid 1002, uptime 0:00:03
+     mynctl  | validators-1:casper-net-1-sidecar-3    RUNNING   pid 1022, uptime 0:00:03
+     mynctl  | validators-2:casper-net-1-node-4       RUNNING   pid 1081, uptime 0:00:02
+     mynctl  | validators-2:casper-net-1-node-5       RUNNING   pid 1083, uptime 0:00:02
+     mynctl  | validators-2:casper-net-1-sidecar-4    RUNNING   pid 1082, uptime 0:00:02
+     mynctl  | validators-2:casper-net-1-sidecar-5    RUNNING   pid 1084, uptime 0:00:02
+     ```
+
 ## Part 2: Casper Client (Rust)
 
 To interact with your local Condor network, we'll use the Casper Client written in Rust. This is just one option. There are other supported SDKs that are also becoming compatible with Condor.
