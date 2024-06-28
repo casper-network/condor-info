@@ -80,6 +80,7 @@ To interact with your local Condor network, we'll use the Casper Client written 
     "api_version": "2.0.0",
   ...
 }
+```
 
 ## Using the Casper Client
 
