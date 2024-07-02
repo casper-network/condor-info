@@ -29,16 +29,26 @@ The Condor JSON-RPC definition can be seen in this Knowledge Base at the followi
 | state_get_dictionary_item             | state_get_dictionary_item             | Unchanged     |
 | query_global_state                    | query_global_state                    | Unchanged     |
 | query_balance                         | query_balance                         | Unchanged     |
+|                                       | query_balance_details                 | Added         |
 | info_get_peers                        | info_get_peers                        | Unchanged     |
 | info_get_status                       | info_get_status                       | Peers & latest switch block hash are now returned with the result     |
 | info_get_validator_changes            | info_get_validator_changes            | Unchanged     |
 | info_get_chainspec                    | info_get_chainspec                    | Unchanged     |
 | chain_get_block                       | chain_get_block                       | Now returns Block with Signatures         |
 | chain_get_block_transfers             | chain_get_block_transfers             | Unchanged     |
+| state_get_item                        | state_get_item                        | Deprecated    |
 | state_get_balance                     | state_get_balance                     | Balance now reflects all active holds     |
 | chain_get_era_info_by_switch_block    | chain_get_era_info_by_switch_block    | Unchanged     |
 | state_get_auction_info                | state_get_auction_info                | Unchanged     |
 | chain_get_era_summary                 | chain_get_era_summary                 | Unchanged     |
 
+account_put_transaction
+info_get_transaction
+query_balance_details
+state_get_entity
+JSON-RPC: Speculative Execution
 
+speculative_exec_txn
+
+Also
 
