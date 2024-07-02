@@ -4,37 +4,12 @@ Public distributed blockchain networks that support smart contract generally inc
 
 The public Casper Network and its testnet have used such a gas model from their genesis. Per deploy, transactors specify an amount of token to convert into gas at a 1:1 ratio, to be used to execute that deploy. All gas consumed in each block is allotted to the proposer of that block in the form of transaction fees. Also included in the model are tables to calculate gas costs and support for some portion of unconsumed gas to be refunded to transactors. 
 
-This can be abstracted as payment, gas price, fee, and refund.
-
-The `casper-node 2.0` reference implementation (aka Condor) has been augmented with the capability to support different options for payment, gas price, fee, and refund. 
-
--- some explanation here of the options --
-
--- We currently intend to launch 2.0 onto testnet and mainnet configured for fixed + dynamic gas price (1-3) + no-fee + no-refund  
-
---- a mention that gas limit = cost / gas price
-
-Under this configuration profile, each kind of transaction has a fixed gas limit based upon its size and computational requirements. 
--- break out the kinds of transactions and their current base costs here
-
--- explanation of placing and removing `gas holds` on a users balance  (not 'locked' and 'unlocked' or 'returned')
-
---- `total balance` && `available balance` (not 'pending' and 'available')
-
---- available balance = total balance - sum(non expired holds)
-
---- we dont PERFORM transactions, we EXECUTE them
-
-<!---
-  this is as far as I got -ed
--->
-
+This can be abstracted as payment, gas price, fee, and refund. The `casper-node 2.0` reference implementation (aka Condor) has been augmented with the capability to support different options for payment, gas price, fee, and refund. 
 
 ## Design
-
 The ultimate goal of any gas mechanism is to prevent exploitation of a network's resources. Aside from incentivizing validators, there is no fundamental reason to charge users for making transactions if their honesty can be guaranteed. By designing a system that disincentivizes wasteful transactions without charging a fee, resistance to exploitation can be maintained while allowing users to transact freely.
 
-Casper 2.0 proposes the novel method of locking the tokens that would otherwise be spent on gas in the payers account for a specified duration. The duration of the locking period is defined [here](https://github.com/casper-network/casper-node/blob/feat-2.0/resources/production/chainspec.toml#L166) in the [casper-node](https://github.com/casper-network/casper-node) chainspec:
+Casper 2.0 proposes the novel method of placing a hold the tokens that would otherwise be spent on gas for a specified duration. The duration of the locking period is defined [here](https://github.com/casper-network/casper-node/blob/feat-2.0/resources/production/chainspec.toml#L166) in the [casper-node](https://github.com/casper-network/casper-node) chainspec:
 
 ```toml
 # If fee_handling is set to 'no_fee', the system places a balance hold on the payer
@@ -49,7 +24,7 @@ Casper 2.0 proposes the novel method of locking the tokens that would otherwise 
 gas_hold_interval = '24 hours'
 ```
 
-How the tokens are unlocked is also configurable. Currently implemented are `accrued` and `amortized`, as described below, however any function `f(t)` can be implemented to unlock tokens on a different schedule for optimal performance:
+How gas holds are released is also configurable. Currently implemented are `accrued` and `amortized`, as described below, however any function `f(t)` can be implemented to unlock tokens on a different schedule for optimal performance:
 
 * **Accrued**<sub>red</sub>: $f(t) = n, \text{ where } n = \text{100\% gas locked}$
 * **Amortized**<sub>purple</sub>: $f(t) = n - t, \text{ where } n = \text{100\% gas locked}$
