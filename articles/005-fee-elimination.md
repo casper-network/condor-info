@@ -1,10 +1,34 @@
 # Fee Elimination on Casper 2.0
 
-Public distributed smart contract blockchain networks have historically required the use of a "gas" economy where transactors pay for the computation of their request. This is accepted as a de facto requirement to prevent malicious actors from halting a network via attack vectors such as issuing phony transaction requests or wasting resources. The Casper Network is subject to the same denial-of-service attacks, and so must also employ a mechanism to disincentivize the usage of block-space.
+Public distributed blockchain networks that support smart contract generally include a notion commonly known as "gas", which is acquired in finite quantities and used to meter and limit resource consumption by individual transactors. In such a model, a transactor's available gas is consumed by their usage of computation, data storage, and possibly other chain-specific resources. 
 
-Casper's "Condor" network upgrade proposes an alternative solution to a traditional spot gas market, one where network users don't pay a penny in fees. This new design aims to make transactions free on the Casper mainnet.
+The public Casper Network and its testnet have used such a gas model from their genesis. Per deploy, transactors specify an amount of token to convert into gas at a 1:1 ratio, to be used to execute that deploy. All gas consumed in each block is allotted to the proposer of that block in the form of transaction fees. Also included in the model are tables to calculate gas costs and support for some portion of unconsumed gas to be refunded to transactors. 
 
-In Casper's new model, in contrast to paying for gas, the gas payment is locked in the paying account for a period of time before being made available again. At no point is the CSPR actually removed from the account of the user. Once the holding period is up, the tokens are unlocked ("returned") to the user's spendable balance. Like the pending and available balances of a bank account, the locked and liquid balances of a transacting Casper account are maintained in the blockchain's state. When attempting to perform a transaction, the pending and available account balances will be calculated to ensure sufficient funds.
+This can be abstracted as payment, gas price, fee, and refund.
+
+The `casper-node 2.0` reference implementation (aka Condor) has been augmented with the capability to support different options for payment, gas price, fee, and refund. 
+
+-- some explanation here of the options --
+
+-- We currently intend to launch 2.0 onto testnet and mainnet configured for fixed + dynamic gas price (1-3) + no-fee + no-refund  
+
+--- a mention that gas limit = cost / gas price
+
+Under this configuration profile, each kind of transaction has a fixed gas limit based upon its size and computational requirements. 
+-- break out the kinds of transactions and their current base costs here
+
+-- explanation of placing and removing `gas holds` on a users balance  (not 'locked' and 'unlocked' or 'returned')
+
+--- `total balance` && `available balance` (not 'pending' and 'available')
+
+--- available balance = total balance - sum(non expired holds)
+
+--- we dont PERFORM transactions, we EXECUTE them
+
+<!---
+  this is as far as I got -ed
+-->
+
 
 ## Design
 
@@ -56,4 +80,3 @@ If this proves to be too cheap, the locking period can be changed or the block g
 The Casper Network, like any true decentralized blockchain, allows miners to act in their greatest economic interest when it comes to validating transactions. The purpose of this is to incentivize validators as much as possible, as this encourages more to come online. Part of the income a validator earns comes from fees paid by a deployer, which entices validators to pick up their transactions. When no fee is paid by the deployer, however, an incentive must be provided to the validators.
 
 Casper's solution is to make the validators whole, minting the tokens to them that they otherwise would have been paid.
-
