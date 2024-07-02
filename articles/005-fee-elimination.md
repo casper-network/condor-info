@@ -2,14 +2,14 @@
 
 Public distributed blockchain networks that support smart contract generally include a notion commonly known as "gas", which is acquired in finite quantities and used to meter and limit resource consumption by individual transactors. In such a model, a transactor's available gas is consumed by their usage of computation, data storage, and possibly other chain-specific resources. 
 
-The public Casper Network and its testnet have used such a gas model from their genesis. Per deploy, transactors specify an amount of token to convert into gas at a 1:1 ratio, to be used to execute that deploy. All gas consumed in each block is allotted to the proposer of that block in the form of transaction fees. Also included in the model are tables to calculate gas costs and support for some portion of unconsumed gas to be refunded to transactors. 
+The public Casper Network and its testnet have used such a gas model from their genesis. Per deploy, transactors specify an amount of token to convert into gas at a 1:1 ratio, to be used to execute that deploy. All gas consumed in each block is allotted to the proposer of that block in the form of transaction fees. Also included in the model are tables to calculate gas costs and support for some portion of unconsumed gas to be refunded to transactors. This can be abstracted as payment, gas price, fee, and refund. 
 
-This can be abstracted as payment, gas price, fee, and refund. The `casper-node 2.0` reference implementation (aka Condor) has been augmented with the capability to support different options for payment, gas price, fee, and refund. 
+In addition to the 1.x model, the `casper-node 2.0` reference implementation (aka Condor) has been augmented with additional options for handling payment, gas price, fee, and refund. This configurable capability allows public and private chains using the software to opt in to behaviors that suit their purpose, and also allows the exploration of alternative strategies such as not turning token spent on gas into fees, instead placing temporary holds on transactor balances. We call this *__fee elimination__*, and currently intend to roll Condor out to testnet and mainnet with this strategy active.
 
 ## Design
 The ultimate goal of any gas mechanism is to prevent exploitation of a network's resources. Aside from incentivizing validators, there is no fundamental reason to charge users for making transactions if their honesty can be guaranteed. By designing a system that disincentivizes wasteful transactions without charging a fee, resistance to exploitation can be maintained while allowing users to transact freely.
 
-Casper 2.0 proposes the novel method of placing a hold the tokens that would otherwise be spent on gas for a specified duration. The duration of the locking period is defined [here](https://github.com/casper-network/casper-node/blob/feat-2.0/resources/production/chainspec.toml#L166) in the [casper-node](https://github.com/casper-network/casper-node) chainspec:
+Condor proposes the novel method of placing a temporary hold upon the tokens that would otherwise be spent on gas. The duration of gas holds is defined [here](https://github.com/casper-network/casper-node/blob/feat-2.0/resources/production/chainspec.toml#L166) in the [casper-node](https://github.com/casper-network/casper-node) chainspec:
 
 ```toml
 # If fee_handling is set to 'no_fee', the system places a balance hold on the payer
@@ -54,4 +54,8 @@ If this proves to be too cheap, the locking period can be changed or the block g
 
 The Casper Network, like any true decentralized blockchain, allows miners to act in their greatest economic interest when it comes to validating transactions. The purpose of this is to incentivize validators as much as possible, as this encourages more to come online. Part of the income a validator earns comes from fees paid by a deployer, which entices validators to pick up their transactions. When no fee is paid by the deployer, however, an incentive must be provided to the validators.
 
-Casper's solution is to make the validators whole, minting the tokens to them that they otherwise would have been paid.
+Casper's solution is <strike>to make the validators whole, minting the tokens to them that they otherwise would have been paid. </strike> 
+
+> Ed says: We *do not* mint more token for this, we place a validator credit instead. I described this in the recording, towards the end.
+>
+> TODO: Dylan, some explanation of gas hold records and balance calculations should probably be added to this doc, perhaps under an Implementation header. 
