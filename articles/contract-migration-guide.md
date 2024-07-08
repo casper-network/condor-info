@@ -2,6 +2,8 @@
 
 Casper 2.0 introduces changes that require adaptation of your existing Casper 1.x smart contracts. This guide outlines the crucial updates and provides a step-by-step approach for a seamless upgrade, using the CEP-18 contract as a reference.
 
+**Note:** The code examples in this guide are a work in progress (WIP) and may be subject to change. For the latest, most up-to-date code, please refer to the [CEP-18 repository](https://github.com/casper-ecosystem/cep18/pull/142).
+
 ## Key Changes in Casper 2.0 and Their Implications
 
 1. **Key Representations:**
@@ -50,7 +52,9 @@ Casper 2.0 introduces changes that require adaptation of your existing Casper 1.
 3. **Event Handling:**
    - **Native Events and Message Topics:**
      - Casper 2.0 prioritizes native event emission through message topics, offering flexibility and better integration.
+     - **While not mandatory, switching to native events is recommended due to their cost-efficiency.**
      - Utilize `runtime::emit_message` to send events on specific topics.
+     - Unlike data stored in dictionaries, messages (natvie events) are not held in the global state. This eliminates the gas cost associated with stored bytes, making messages a more cost-effective option.
    - **CES (Casper Event Standard):**
      - CES is still supported for backward compatibility, but native events are now the recommended approach.
 
@@ -60,26 +64,48 @@ Casper 2.0 introduces changes that require adaptation of your existing Casper 1.
    - **Hash Types:**
      - `ContractPackageHash` is replaced with `PackageHash`, converting to `Key::Package` instead of `Key::Hash`.
      - `ContractHash` is replaced with `AddressableEntityHash`, corresponding to `AddressableEntity` in the global state.
+   - **`runtime::get_call_stack` and Caller Identification:**
+     - `runtime::get_call_stack` now returns a vector of `Caller` variants (`Initiator` or `Entity`). `Caller::Initiator` provides the `AccountHash` of the calling account, while `Caller::Entity` provides both the `PackageHash` and `AddressableEntityHash` of the calling contract. The `call_stack_element_to_address` function below demonstrates how to get the `AddressableEntity`:
 
-## Essential Upgrade Steps
+     ```rust
+     fn call_stack_element_to_address(call_stack_element: Caller) -> Key {
+         match call_stack_element {
+             Caller::Initiator { account_hash } => {
+                 Key::AddressableEntity(EntityAddr::Account(account_hash.value()))
+             }
+             Caller::Entity { package_hash, .. } => {
+                 Key::AddressableEntity(EntityAddr::SmartContract(package_hash.value()))
+             }
+         }
+     }
+     ```
+   - Please note that`runtime::get_caller` still returns an `AccountHash`. This is potentially confusing, as the new standard uses `Key::AddressableEntity(Account)`. The `AccountHash` can be converted using `Key::AddressableEntity(EntityAddr::Account(AccountHash.value())`.
+
+## Upgrade Steps
 
 1. **Key Migration:**
    - Update all key references in your contract logic and storage to `Key::AddressableEntity`.
    - Write and execute migration functions to convert existing storage keys.
+   - Its possible to avoid this migration step if you account for the new key structure (Key::AddressableEntity) in your contract logic and storage management.
    
     Example Migration Function (CEP-18):
 
     ```rust
     #[no_mangle]
     pub fn migrate_user_balance_keys() {
+        // 1. Retrieve Arguments for Event Handling and Reverts
         let event_on: bool = get_named_arg(EVENTS);
         let revert_on: bool = get_named_arg(REVERT);
+        // 2. Initialize Data Structures for Tracking Migration Results
         let mut success_map: Vec<(Key, Key)> = Vec::new();
         let mut failure_map: BTreeMap<Key, String> = BTreeMap::new();
 
+        // 3. Retrieve Map of old keys and their account status
         let keys: BTreeMap<Key, bool> = get_named_arg(USER_KEY_MAP);
         let balances_uref = get_balances_uref();
+        // 4. Iterate Through Keys and Perform Migration
         for (old_key, is_account_flag) in keys {
+            // Determine the correct migrated key type (Account or SmartContract) based on the flag
             let migrated_key = match old_key {
                 Key::Account(account_hash) => {
                     if !is_account_flag {
@@ -112,7 +138,10 @@ Casper 2.0 introduces changes that require adaptation of your existing Casper 1.
                     continue;
                 }
             };
+            // Retrieve balance associated with the old key
             let old_balance = read_balance_from(balances_uref, old_key);
+
+            // Transfer balance if it exists
             if old_balance > U256::zero() {
                 let new_key_existing_balance = read_balance_from(balances_uref, migrated_key);
                 write_balance_to(balances_uref, old_key, U256::zero());
@@ -129,6 +158,7 @@ Casper 2.0 introduces changes that require adaptation of your existing Casper 1.
             success_map.push((old_key, migrated_key));
         }
 
+        // 5. Emit Event for Balance Migration Results
         if event_on {
             events::record_event_dictionary(Event::BalanceMigration(BalanceMigration {
                 success_map,
@@ -142,8 +172,10 @@ Casper 2.0 introduces changes that require adaptation of your existing Casper 1.
 2. **Entry Point Updates:**
    - Adjust entry point declarations to include `EntryPointType`, `EntryPointPayment`.
 
-3. **Event Handling:**
-   - Update event emission and handling logic accordingly (use `runtime::emit_message` for native events).
+3. **Update `get_call_stack` and `get_caller` Logic:**
+   - Adjust your contract logic to correctly handle the changes in `runtime::get_call_stack`:
+   - `runtime::get_caller` still returns an `AccountHash`.
+   - Ensure that you convert `AccountHash` to the new `Key::AddressableEntity(Account)` format for consistency with Casper 2.0.
 
 4. **Installation and Upgrade:**
    - When installing or upgrading your contract, use the `new_contract` and `add_contract_version` functions with the additional `MessageTopics` argument if using native events.
