@@ -50,6 +50,8 @@ Where:
 
 If this proves to be too cheap, the locking period can be changed or the block gas limit increased.
 
+> TODO: Opportunity cost
+
 ## Incentivizing Validators
 
 The Casper Network, like any truly decentralized blockchain, allows miners to act in their greatest economic interest when it comes to validating transactions. The purpose of this is to incentivize validators as much as possible, encouraging more to come online. Part of the income a validator earns comes from fees paid by a deployer, which entices validators to pick up their transactions. When no fee is paid by the deployer at all, however, an incentive must be provided to the validators.
