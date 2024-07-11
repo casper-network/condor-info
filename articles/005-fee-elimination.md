@@ -17,7 +17,8 @@ In Casper 1.x, with each transaction, transactors must specify an amount of toke
 | Refund    | A portion of the fee which may be returned to the transactor    |
 | | |
 
-> [!NOTE] The Casper node software supports a number of configurable options which govern how gas may be calculated for a given transaction. A discussion of these is outside the scope of this article. This article is concerned with how these gas costs are dealt with, once calculated. Gas cost options will be the subject of another article.
+> [!NOTE]
+> The Casper node software supports a number of configurable options which govern how gas may be calculated for a given transaction. A discussion of these is outside the scope of this article. This article is concerned with how these gas costs are dealt with, once calculated. Gas cost options will be the subject of another article.
 
 ### Fee Elimination
 __Fee Elimination is the strategy of placing temporary holds on transactor balances to limit their use of network resources, instead of taking those costs from their on-chain balances__. 
@@ -30,7 +31,7 @@ A hold may be thought of as a temporary freeze on some portion of the funds in a
 ### Hold release
 The Casper Node 2.0 software currently supports two models, "Accrued" and "Amortized". 
 
-> [!NOTE] The Condor software allows for any time-based function to be developed and used to calculate hold releases. However, for simplicity we will first deal with the currently available options. 
+> The Condor software allows for any time-based function to be developed and used to calculate hold releases. However, for simplicity we will first deal with the currently available options. 
 
 #### Accrued
 100% of the hold is held until the hold expires. So, at any given point in the duration of the hold, the effective amount of the hold is 100%, until expiry. 
