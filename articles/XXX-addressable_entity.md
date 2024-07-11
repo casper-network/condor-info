@@ -1,6 +1,6 @@
 # AddressableEntity in Casper 2.0
 
-Casper 2.0 introduces significant changes in the representation and management of accounts and smart contracts, through the introduction of the `AddressableEntity` type. This new structure replaces the separate `AccountHash` and `ContractHash` used in Casper 1.x, bringing a unified approach to interact with entities on the network.
+Casper 2.0 introduces significant changes in the representation and management of accounts and smart contracts, through the introduction of the `AddressableEntity` type. This new structure replaces the separate `AccountHash` and `ContractHash` used in Casper 1.x, bringing a unified approach to interact with entities on the network. Contracts can now hold and manage funds directly through associated purses, similar to user accounts. They can also manage their own keys, enabling more sophisticated access control.
 
 In this article, we'll dive into the details of `AddressableEntity`, exploring its structure and functionalities.
 
@@ -74,18 +74,15 @@ The "Address Merge" in the Condor upgrade of Casper is a foundational shift, imp
 
 Post-Condor, all accounts and smart contract addresses residing within the global state will be automatically migrated to the `AddressableEntity` structure. This means the network itself will recognize and handle these entities using the new format.
 
-**Smart Contract Responsibility:**
+**Smart Contract Compatibility Considerations:**
 
-While the global state transitions is automatic, the internal mechanisms of your smart contracts might not be. If your contracts rely on identifying the caller (e.g., to enforce permissions) or store addresses in their own internal storage, you'll need to take action.
+While the global state automatically transitions to `AddressableEntity`, existing contracts are expected to function without any modification. 
 
-**Essential Steps for Contract Compatibility:**
+* **Caller Identification:**
+Existing host functions used to identify the caller within your contract will continue to work as before, ensuring no disruption to your contract's functionality. However, new host functions have been introduced that are specifically designed to work with the AddressableEntity format.
 
-1. **Internal Storage Migration:** Update any data stored within your contract that uses the old `AccountHash` or `ContractHash` format. This typically involves writing custom migration functions to convert these keys to the new `Key::AddressableEntity` structure. The CEP-18 contract provides excellent examples (`migrate_user_balance_keys`, `migrate_user_allowance_keys`) that can serve as templates for your own migration logic.
+* **External Contract Interaction:** Other contracts may have updated their interfaces to accept AddressableEntity arguments. Its worth to verify the argument types to avoid potential errors.
 
-2. **Caller Identification:** If your contract's logic depends on distinguishing between accounts and contracts calling it, you'll need to update your code to work with the new `Key::AddressableEntity` format.
+**Note:**
 
-3. **External Contract Interactions:**  If your contract interacts with other contracts, verify that the parameters you pass when calling their entry points correspond to the new `Key::AddressableEntity` format.
-
-**Important Note:**
-
-* Failing to upgrade your contract could lead to unexpected behavior or errors, especially if your logic relies on the distinction between accounts and contracts. 
+* Upgrading a contract to a newer version may involve complexities, such as changes to the contract's addressable hash. These changes might require coordination with centralized and decentralized exchanges, as well as communication with your community to ensure a smooth transition.
