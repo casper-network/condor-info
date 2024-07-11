@@ -112,4 +112,14 @@ The Casper Network, like any truly decentralized blockchain, allows nodes to act
 Casper's solution is quite simple, but requires understanding how validators are selected and compensated. On Casper Networks, 100 validators are weightily selected to validate all the blocks within the current "[era](https://docs.casper.network/concepts/glossary/E/#era)", which advances every 2 hours. At the end of each era, validator rewards are calculated, put into a pot, and distributed to validators based on the amount of token staked by each. Additionally, a "validator credit" is added to validators who propose populated blocks, proportional to the size of the blocks they propose. This validator credit is then applied to the payout scheme, awarding more of the pot to the hardest-working nodes. Additionally, the validator credit is considered as additional staking weight for the next era when the next [booking block](https://docs.casper.network/concepts/glossary/B/#booking-block) appears.
 
 ---
-Further Reading
+Further Reading/Terms
+
+#### Proposer
+A validator proposing a block to the network for execution  
+[Consensus](https://docs.casper.network/concepts/economics/consensus/)  
+[Validator](https://docs.casper.network/concepts/glossary/V/#validator)
+#### Fees
+A portion of a transaction's gas costs given over to the proposer of the block containing that transaction.  
+[Gas Concepts](https://docs.casper.network/concepts/economics/gas-concepts/)  
+[Runtime Economics](https://docs.casper.network/runtime/)  
+
