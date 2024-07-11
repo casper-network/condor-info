@@ -15,30 +15,29 @@ In Casper 1.x, with each transaction, transactors must specify an amount of toke
 | Gas Price | The cost accrued by the execution of the transaction |
 | Fee       | The portion of the payment remaining after the gas cost is subtracted  |
 | Refund    | A portion of the fee which may be returned to the transactor    |
-| | |
 
 > [!NOTE]
 > The Casper node software supports a number of configurable options which govern how gas may be calculated for a given transaction. A discussion of these is outside the scope of this article. This article is concerned with how these gas costs are dealt with, once calculated. Gas cost options will be the subject of another article.
 
 ### Fee Elimination
-__Fee Elimination is the strategy of placing temporary holds on transactor balances to limit their use of network resources, instead of taking those costs from their on-chain balances__. 
+> __Fee Elimination is the strategy of placing temporary holds on transactor balances corresponding to their incurred gas costs, instead of taking those costs from their on-chain balances__. 
 
 Under 1.x, when the gas cost of a transaction has been calculated, the amount of that gas cost is taken from the purse of the transactor. With Fee Elimination, a hold is placed on the calculated amount of gas cost for a period of days which is also configurable. This is known as the *hold period*. 
 
-### Holds, hold periods, and hold releases
+### Holds
 A hold may be thought of as a temporary freeze on some portion of the funds in an account. The funds never leave the purse upon which the hold is placed, but the owner of those funds may not spend them as long as the hold is in effect, and the funds held are not counted towards the available balance of that purse. 
 
 ### Hold release
-The Casper Node 2.0 software currently supports two models, "Accrued" and "Amortized". 
+The Casper Node 2.0 software currently supports two hold release models, "Accrued" and "Amortized". 
 
-> The Condor software allows for any time-based function to be developed and used to calculate hold releases. However, for simplicity we will first deal with the currently available options. 
+> [!NOTE]
+> The Condor software allows for any time-based function to be developed and used to calculate hold releases. However, for simplicity we will first deal with the two currently available options. 
 
 #### Accrued
-100% of the hold is held until the hold expires. So, at any given point in the duration of the hold, the effective amount of the hold is 100%, until expiry. 
+100% of the hold is held until the hold expires. At any given point in the duration of the hold, the effective amount of the hold is 100%, until expiry when it is 0%. 
 
 #### Amortized
-The effective amount of the hold is reduced linearly over the course of the hold duration. So, at any point in the duration of the hold, the percentage of the hold *amount* that is effective is the percentage of the hold *duration* that has *__not__* already elapsed. 
-Thought of another way, the hold amount at any time is the hold amount minus the elapsed time expressed as a percentage of the full hold amount.
+The effective amount of the hold is reduced linearly over the course of the hold duration. So, at any point in the duration of the hold, the effective hold *amount* is proportional to the percentage of the hold *duration* that remains before expiry. 
 
 So, for example, if:
 - A hold of 180 CSPR is placed on an purse which holds 1000 CSPR, and
@@ -50,6 +49,14 @@ Then, 9 days after the hold was placed, the current effective amount of the hold
  - Multiplied by the hold amount (180 * .9) = 162 
 
 The effective balance in that purse, at that point in time, is 1000 - 162 = 838
+
+Over the course of the hold's duration, this calculation gives us: 
+| Hold amount | Hold period | Time Elapsed | Effective Hold | 
+| --- | --- | --- | --- |
+| 180 | 90 | 1 | 178 |
+| 180 | 90 | 9 | 162 |
+| 180 | 90 | 45 | 90 |
+| 180 | 90 | 89 | 2 |
 
 ### More about Gas holds 
 The duration of gas holds is defined [here](https://github.com/casper-network/casper-node/blob/feat-2.0/resources/production/chainspec.toml#L166) in the [casper-node](https://github.com/casper-network/casper-node) chainspec:
