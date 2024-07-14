@@ -1,0 +1,4 @@
+{
+    "description": "Casper Platform protocol version",
+    "type": "string"
+}

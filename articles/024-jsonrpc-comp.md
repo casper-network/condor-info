@@ -12,7 +12,7 @@ Since the network's inception, the Casper node has exposed an API over HTTP, usi
 One of the major changes in the Condor upgrade is the Casper Sidecar. The Sidecar is a separate process which runs on the same machine as the takes responsibility for running the RPC server and exposing the RPC endpoints to the Internet. 
 The Sidecar is basically a companion to the node, which exposes the node JSON RPC while running in a separate process. What this means is, the node software itself no longer exposes a JSON RPC API to the consumer. This job is done by the Sidecar. 
 
-In practice, we expect that most people will see very little change in how they think about and consume RPC functionality, if that is their primary objective. Most node operators will operate a sidecar process on the same machine, and the dApp developer will see no difference in how they call it. However, any discussion of the JSON RPC changes for Condor would be remiss not to mention this development. 
+In practice, we expect that most people will see very little change in how they think about and consume RPC functionality, if that is their primary objective. Most node operators will operate a sidecar process on the same machine, and the dApp developer will see no difference in how they call it. However, any discussion of the JSON RPC changes for Condor would be remiss not to mention this development. That said, the existence of the sidecar has practically no relevance to those interested only in *consuming* the RPC's features, and who have no interest in the Binary Port. It does, however, have relevance for those running a Casper Node, or who wish to avail of the fine-grained control particular to the binary port. 
 
 ### The Binary Port
 
