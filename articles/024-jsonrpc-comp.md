@@ -24,13 +24,11 @@ The biggest immediately obvious change in the RPC is the change in name from dep
 
 
 ### Casper 1.x JSON-RPC Schema definition. 
-The full schema definition of the Casper 1.x node JSON-RPC may be found here:
-[./024-jsonrpc-comp/rpc-1.5/schema.json](./024-jsonrpc-comp/rpc-1.5/schema.json)
+The full schema definition of the Casper 1.x node JSON-RPC may be found [here](./024-jsonrpc-comp/rpc-1.5/schema.json)
 
 
 ### Casper 2.0 (Condor) JSON-RPC Schema Definition
-The full schema definition for the Condor JSON-RPC is here: 
-[./024-jsonrpc-comp/rpc-2.0/schema.json](./024-jsonrpc-comp/rpc-2.0/schema.json)
+The full schema definition for the Condor JSON-RPC is [here](./024-jsonrpc-comp/rpc-2.0/schema.json)
 
 ## Differences between v1.5 and v2.0
 
