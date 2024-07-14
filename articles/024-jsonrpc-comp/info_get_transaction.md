@@ -1,8 +1,8 @@
 ## info_get_transaction
-This method replaces the pre-existing [info_get_deploy](./rpc-1.5/info_get_deploy.json) method. to some extent, it simply mirrors the pre-existing method. The main differences are
+The [info_get_transaction](./rpc-2.0/info_get_transaction.json) method replaces the pre-existing [info_get_deploy](./rpc-1.5/info_get_deploy.json) method. to some extent, it simply mirrors the pre-existing method. 
 
 - Parameters
-   - Instead of a DeployHash, it accepts a TransactionHash
+  - Accepts a [TransactionHash](./rpc-2.0/components/TransactionHash.json) instead of a [DeployHash](./rpc-1.5/components/DeployHash.json)   
 - Results
-   - Instead of a Deploy, it returns a Transaction
-   - It also returns an ExecutionResults instead of ExecutionInfo. ExecutionResults is now always returned. 
+  - Returns a [Transaction](./rpc-2.0/components/Transaction.json) instead of a [Deploy](./rpc-1.5/components/Deploy.json)
+  - Returns an [ExecutionInfo](./rpc-2.0/components/ExecutionInfo.json) instead of [ExecutionResult](./rpc-1.5/components/JsonExecutionResult.json)  
