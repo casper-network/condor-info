@@ -1,15 +1,66 @@
 # Fee Elimination on Casper 2.0
 
-Public distributed blockchain networks that support smart contract generally include a notion commonly known as "gas", which is acquired in finite quantities and used to meter and limit resource consumption by individual transactors. In such a model, a transactor's available gas is consumed by their usage of computation, data storage, and possibly other chain-specific resources. 
+The Casper 2.0 (aka Condor) network upgrade introduces new options to the way a Casper Network can be configured to handle gas consumption. Scheduled along with the release of Condor into Mainnet is a change in the configuration of the Casper Network to use a model known as **Fee Elimination** for gas payments. The purpose of this article is to introduce this model, and describe how Fee Elimination will affect the behaviour of the Casper Network once Condor is released.
 
-The public Casper Network and its testnet have used such a gas model from their genesis. Per deploy, transactors specify an amount of token to convert into gas at a 1:1 ratio, to be used to execute that deploy. All gas consumed in each block is allotted to the proposer of that block in the form of transaction fees. Also included in the model are tables to calculate gas costs and support for some portion of unconsumed gas to be refunded to transactors. This can be abstracted as payment, gas price, fee, and refund. 
+## Gas
+Public distributed blockchain networks that support smart contracts generally use a concept commonly known as "[gas](https://docs.casper.network/concepts/glossary/G/#gas)", which can be thought of as "the ability to do work on-chain". Gas is acquired in finite quantities and used to meter and limit resource consumption by individual transactors. A transactor's available gas is consumed by their on-chain usage of computation, data storage, and possibly other chain-specific resources. The public Casper Network and its testnet have used such a gas model since their geneses.
 
-In addition to the 1.x model, the `casper-node 2.0` reference implementation (aka Condor) has been augmented with additional options for handling payment, gas price, fee, and refund. This configurable capability allows public and private chains using the software to opt in to behaviors that suit their purpose, and also allows the exploration of alternative strategies such as not turning token spent on gas into fees, instead placing temporary holds on transactor balances. We call this *__fee elimination__*, and currently intend to roll Condor out to testnet and mainnet with this strategy active.
+## Casper 1.x: Payment, Gas Price, Fees and Refunds
+On Casper 1.x, every transaction is subject to gas consumption. The transactor must specify an amount of token that is converted to gas and used to pay for execution. All gas consumed in each block is allotted to the [proposer](#proposer) of that block in the form of transaction [fees](#fees). The model also includes tables to allow calculation of gas costs, and support for some portion of unconsumed gas to be refunded to transactors. We refer to these concepts using the following terms:
 
-## Design
-The ultimate goal of any gas mechanism is to prevent exploitation of a network's resources. Aside from incentivizing validators, there is no fundamental reason to charge users for making transactions if their honesty can be guaranteed. By designing a system that disincentivizes wasteful transactions without charging a fee, resistance to exploitation can be maintained while allowing users to transact freely.
+* **Gas Limit**: An amount of gas, specified by the transactor, at which to cancel a transaction.
+* **Gas Price**: The network gas price; the ratio between the cost of 1 unit of gas and 1 mote.
+* **Gas Cost**: The amount of gas needed to pay for execution of a transaction.
+* **Payment**: The amount of token specified by the transactor to pay for the execution of a transaction.
+* **Refund**: All or a portion of the remaining token after gas is purchased for execution.
 
-Condor proposes the novel method of placing a temporary hold upon the tokens that would otherwise be spent on gas. The duration of gas holds is defined [here](https://github.com/casper-network/casper-node/blob/feat-2.0/resources/production/chainspec.toml#L166) in the [casper-node](https://github.com/casper-network/casper-node) chainspec:
+> [!NOTE]
+> The Casper node software supports a number of configurable options which govern how gas may be calculated for a given transaction. A discussion of these is outside the scope of this article. This article is concerned with how these gas costs are dealt with, once calculated. Gas cost options will be the subject of another article.
+
+## Fee Elimination
+
+> __Fee Elimination is the strategy of placing temporary holds on transactor balances corresponding to their incurred gas costs, instead of taking those costs from their on-chain balances__.
+
+Under 1.x, transactors must pay for gas directly from their purse balances. With Fee Elimination on Casper 2.0, a hold is placed on the calculated **Gas Cost** for a configurable period of time known as the **Hold Period**. Fees are therefore not forfeighted by transactors, and funds are not spent to execute transactions.
+
+### Holds
+
+A hold may be thought of as a temporary freeze on some portion of the funds in an account. The funds never leave the purse upon which the hold is placed, but the owner of those funds may not spend them as long as the hold is in effect, and the funds held are not counted towards the available balance of that purse. 
+
+### Hold Release
+
+The Casper Node 2.0 software currently supports two hold release models: **Accrued** and **Amortized**. 
+
+> [!NOTE]
+> The Condor node architecture allows for any time-based function to be developed and used to calculate hold releases. However, for simplicity, this article will deal with the two currently available options.
+
+#### Accrued
+100% of the hold is held until the hold expires. At any given point in the duration of the hold, the effective amount of the hold is 100%. At expiry, all of the funds are again made available to the transactor.
+
+#### Amortized
+The effective amount of the hold is reduced linearly over the course of the hold duration. At any point in the duration of the hold, the effective hold *amount* is proportional to the percentage of the hold *duration* that remains before expiry. 
+
+For example, if:
+- A hold of 180 CSPR is placed on an purse which holds 1000 CSPR
+- The configured hold period is 90 days
+- The hold release model is configured to use amortization
+
+Then, 9 days after the hold was placed, the current effective amount of the hold may be calculated by 
+ - $\frac{\text{Hold Duration} - \text{Time Elapsed}}{\text{Hold Duration}} = \frac{90 - 9}{90} = 0.9$
+ - Multiplied by the hold amount: $180 \times 0.9 = 162$
+
+The effective balance in that purse, at that point in time, is $1000 - 162 = 838 \ \text{CSPR}$
+
+Over the course of the hold's duration, this calculation gives us:
+| Hold Amount | Hold Period | Time Elapsed | Effective Hold |
+| --- | --- | --- | --- |
+| 180 | 90 | 1 | 178 |
+| 180 | 90 | 9 | 162 |
+| 180 | 90 | 45 | 90 |
+| 180 | 90 | 89 | 2 |
+
+### More about Gas holds 
+The duration of gas holds is defined [here](https://github.com/casper-network/casper-node/blob/feat-2.0/resources/production/chainspec.toml#L166) in the [casper-node](https://github.com/casper-network/casper-node) chainspec:
 
 ```toml
 # If fee_handling is set to 'no_fee', the system places a balance hold on the payer
@@ -24,36 +75,51 @@ Condor proposes the novel method of placing a temporary hold upon the tokens tha
 gas_hold_interval = '24 hours'
 ```
 
-How gas holds are released is also configurable. Currently implemented are `accrued` and `amortized`, as described below, however any function `f(t)` can be implemented to unlock tokens on a different schedule for optimal performance:
 
-* **Accrued**<sub>red</sub>: $f(t) = n, \text{ where } n = \text{100\% gas locked}$
-* **Amortized**<sub>purple</sub>: $f(t) = n - t, \text{ where } n = \text{100\% gas locked}$
-* **Logarithmic**<sub>blue</sub>: $f(t) = n - \frac{n}{\ln(n+1)} \ln(t+1), \text{ where } n = \text{100\% gas locked}$
+### Preventing Exploitation
+The ultimate goal of any gas mechanism is to prevent exploitation of a network's resources. Aside from incentivizing validators, there is no fundamental reason to charge users for making transactions if their honesty can be guaranteed. By designing a system that disincentivizes wasteful transactions without charging a fee, resistance to exploitation can be maintained while allowing users to transact freely.
 
-![Gas locked over time](desmos-graph.png "Gas locked over time")
+However, any gas mechanism that doesn't charge users could be vulnerable to denial-of-service attacks. Provided a large enough bankroll, a user could deploy enough transactions to slow the network for the amount of time needed for his or her previous gas payments to unlock, and use these unlocked funds to deploy more transactions, and thus repeat the process ad infinitum. In this way, one could theoretically deploy infinite transactions, cycling through their locked and unlocked balances. 
 
-## Preventing Exploitation
-
-It is intuitive to expect that a gas mechanism that doesn't charge users would be vulnerable to denial-of-service attacks. After all, provided a large enough bankroll, a user could deploy enough transactions to slow the network for the amount of time needed for his or her previous gas payments to unlock. In this way, one could simply deploy infinite transactions, cycling through their locked and unlocked balances. This is a well understood risk and must be avoided at all costs. Attacking the network in this way is a challenge of economic feasibility, much like many other aspects of blockchains. In proof-of-stake networks, owning enough of the total validator stake offers a similar malicious opportunity. To prevent an attack like this from taking place, it must be made to be prohibitively expensive, with little to no incentive to the attacker.
-
-Casper's approach involves a long locking period combined with 8 second blocktimes (half the duration as in v1.5.6). The Casper 2.0 mainnet is slated to roll out with a 30 day locking period, but if increased, the cost to attack would scale linearly.
+Attacking the network in this way is a challenge of economic feasibility, much like many other aspects of blockchains. To prevent an attack like this from taking place, it must be made prohibitively expensive to mount such an attack, with little to no incentive to the attacker. Casper's approach involves using a long locking period, combined with 16 second blocktimes. The Casper 2.0 mainnet is slated to roll out with a 30 day locking period, but if increased, the cost to attack would scale linearly.
 
 Considering a token locking period of 30 days and the **Accrued** unlocking schedule, purchasing just 1% of the total block space of each block would cost:
 
-$\frac{T}{B} \cdot \frac{G}{100} = 10,692,000 \, \text{CSPR}$
+$\frac{T}{B} \cdot \frac{G}{100} = 5,346,000 \, \text{CSPR}$
 
 Where:
 
 * `T` = 30 day locking period
-* `B` = 8 second blocktime
+* `B` = 16 second blocktime
 * `G` = 3300 CSPR block gas limit
 
-If this proves to be too cheap, the locking period can be extended or the block gas limit increased. As the locking duration is increased, not only is the total cost to attack higher, the opportunity cost to keep tokens illiquid and unstaked increases as well. If those tokens were otherwise staked, they could generate sizable rewards.
+If this proves to be too cheap, the locking period can be extended or the block gas limit increased.
 
-## Incentivizing Validators
+#### Opportunity Cost
+In addition to the necessity to maintain large amounts of CSPR token in order to facilitate a DoS attack as laid out above, any prospective attacker would also incur the opportunity cost of being unable to use their CSPR for the duration of the hold period. Simply put, while their CSPR is locked up attacking the network, it cannot be used to earn rewards by staking. Given the amount of CSPR necessarily involved, and assuming any non-trivial potential annualized return on staking CSPR tokens, the ratio of opportunity cost of mounting such an attack versus the incentive to do so swiftly becomes prohibitively high. 
 
-The Casper Network, like any truly decentralized blockchain, allows nodes to act in their greatest economic interest when it comes to validating transactions. The purpose of this is to incentivize validators as much as possible, encouraging more to come online. Part of the income a validator earns comes from fees paid by a deployer, which entices validators to pick up their transactions. When no fee is paid by the deployer at all, however, an incentive must be provided to the validators.
+### Incentivizing Validators
 
-Casper's solution is quite simple, but requires understanding how validators are selected and compensated. On Casper Networks, 100 validators are weightily selected to validate all the blocks within the current "[era](https://docs.casper.network/concepts/glossary/E/#era)", which advances every 2 hours. At the end of each era, validator rewards are calculated, put into a pot, and distributed to validators based on the amount of token staked by each. In an effort to incentivize validators to propose populated blocks, a "validator credit" is added to those who do, proportional to the size of the blocks they propose. This validator credit is then applied to the payout scheme, awarding more of the pot to the hardest-working nodes. Additionally, the validator credit is considered as additional staking weight for the next era when the next [booking block](https://docs.casper.network/concepts/glossary/B/#booking-block) appears.
+The Casper Network, like any truly decentralized blockchain, allows nodes to act in their greatest economic interest when it comes to validating transactions. The purpose of this is to incentivize validators as much as possible, encouraging more to come online. Part of the income a validator earns comes from fees paid by a deployer, which entices validators to pick up their transactions. When no fee is paid by the deployer at all, however, another incentive must be provided to the validators.
 
-> TODO: Dylan, some explanation of gas hold records and balance calculations should probably be added to this doc, perhaps under an Implementation header. 
+Casper's solution is quite simple, but requires understanding how validators are selected and compensated. On Casper Networks, 100 validators are weightily selected to validate all the blocks within the current "[era](https://docs.casper.network/concepts/glossary/E/#era)", which advances every 2 hours. At the end of each era, validator rewards are calculated, put into a pot, and distributed to validators based on the amount of token staked by each. Additionally, a "validator credit" is added to validators who propose populated blocks, proportional to the size of the blocks they propose. This validator credit is then applied to the payout scheme, awarding more of the pot to the hardest-working nodes. Additionally, the validator credit is considered as additional staking weight for the next era when the next [booking block](https://docs.casper.network/concepts/glossary/B/#booking-block) appears.
+
+## Looking Forward
+
+By introducing Fee Elimination to the Casper Network, we hope to make transacting with the blockchain more accessible and less financially cumbersome. With this new model, interacting with smart contracts can become effectively free for users, inviting larger audiences to participate in new and exciting protocols.
+
+As the model is rolled out to Casper's mainnet and testnet, economists and engineers will study its effects on Casper's transaction economy. The data observed will be used to devise proposals and improvements, need they be implemented.
+
+---
+### Further Reading/Terms
+
+#### Proposer
+A validator proposing a block to the network for execution  
+[Consensus](https://docs.casper.network/concepts/economics/consensus/)  
+[Validator](https://docs.casper.network/concepts/glossary/V/#validator)
+
+#### Fees
+A portion of a transaction's gas costs given over to the proposer of the block containing that transaction.  
+[Gas Concepts](https://docs.casper.network/concepts/economics/gas-concepts/)  
+[Runtime Economics](https://docs.casper.network/runtime/)  
+
