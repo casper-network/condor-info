@@ -122,4 +122,4 @@ A validator proposing a block to the network for execution
 A portion of a transaction's gas costs given over to the proposer of the block containing that transaction.  
 [Gas Concepts](https://docs.casper.network/concepts/economics/gas-concepts/)  
 [Runtime Economics](https://docs.casper.network/runtime/)  
-
+[Validator Rewards](https://docs.casper.network/concepts/glossary/R/#reward)
