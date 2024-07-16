@@ -1,12 +1,52 @@
-# Fee Elimination on Casper 2.0
+# Fee elimination with Casper 2.0
 
-Public distributed blockchain networks that support smart contract generally include a notion commonly known as "gas", which is acquired in finite quantities and used to meter and limit resource consumption by individual transactors. In such a model, a transactor's available gas is consumed by their usage of computation, data storage, and possibly other chain-specific resources. 
+## Concepts
 
-The public Casper Network and its testnet have used such a gas model from their genesis. Per deploy, transactors specify an amount of token to convert into gas at a 1:1 ratio, to be used to execute that deploy. All gas consumed in each block is allotted to the proposer of that block in the form of transaction fees. Also included in the model are tables to calculate gas costs and support for some portion of unconsumed gas to be refunded to transactors. This can be abstracted as payment, gas price, fee, and refund. 
+### Economics of on-chain compute
 
-In addition to the 1.x model, the `casper-node 2.0` reference implementation (aka Condor) has been augmented with additional options for handling payment, gas price, fee, and refund. This configurable capability allows public and private chains using the software to opt in to behaviors that suit their purpose, and also allows the exploration of alternative strategies such as not turning token spent on gas into fees, instead placing temporary holds on transactor balances. We call this *__fee elimination__*, and currently intend to roll Condor out to testnet and mainnet with this strategy active.
+#### Gas
 
-## Design
+The general principle we must start with is that any finite resource on a publicly accessible computer network must be rate-limited, because a resource made available without limit is a denial of service attack vector. The finite resource we will discuss here is compute.
+
+Public blockchain networks that support smart contracts generally quantify compute as "gas," which is consumed in finite quantities and used to meter and limit resource consumption by individual transactions. In such a model, a transaction's available gas limits their usage of compute, data storage (as is done in Casper), and possibly other chain-specific resources.
+
+#### Choosing the rate-limiting strategy
+
+The previous section suggests a security argument for rate limiting, but an argument for any particular form of rate limiting has to appeal to economics. The simplest economically-rationalizable means of rate limiting could be seen with Ethereum before adoption of EIP-1559. In that model, users bid on gas in what amounted to a first-price auction. Such an auction allocates gas to the users willing to pay the most and who, consequently, can be assumed to value the compute more. 
+
+In practice, a public blockchain's designers may want to distinguish between different use cases and may value one use case over another, e.g., a blockchain could be designed specifically to ease integration with enterprise operations. The designers may also want to balance the interests of power users (such as DeFi dApps' customers) against those of users primarily interested in token transfers or staking. Such concerns suggests that using a simple auction for gas may be inadequate, as it tends to favor DeFi and crowd out other users due to congestion and price volatility.
+
+The problem of choosing the best gas model suited to the long-term vision of any particular platform is complicated by malicious use (such as a blockstuffing attack running infinite loops on chain) being indistinguishable at the protocol level from legitimate use, due to opacity of the virtual machine bytecode. Casper does distinguish inherently "host side" native operations not involving the virtual machine. Additionally, we can and do use real mainnet use data to inform recommended platform settings based on identifiable clusters of deploys, which can be distinguished by byte size, gas use and whether they invoke a contract or run custom bytecode.
+
+## Gas in Casper 2.0
+
+### Gas in Casper 1.X
+
+The public Casper Network and its testnet have used a simple fixed gas price (1:1 motes to gas units) model since genesis, although it did maintain a separate "lane" for native transfers. Deploys specified the amount of gas they would consume, up to the block gas limit. Depending on chainspec settings, some portion of unused gas could be refunded. Resource use was further rate limited by deploy and block byte size limits, as well as a limit on the total number of deploys in a block.
+
+The 1.X design remained adequate as usage slowly ramped up, but it was always expected that it would be eventually replaced. In particular, the use profile of a public blockchain is heterogeneous and the old design did not take this into account, making it possible for small deploys to fill up all the general WASM deploy slots without consuming much compute.
+
+Fees transferred to proposing validators were the amount of gas purchased (at the fixed 1:1 rate), minus any refunds due to the user.
+
+### Design for Casper 2.0
+
+In addition to the 1.X model, the `casper-node 2.0` reference implementation (i.e., Condor) has been augmented with additional options for handling payment, gas price, fee, and refund. This configurable capability allows public and private chains using the software to opt in to behaviors that suit their purpose, and also allows the exploration of alternative strategies such as not turning token spent on gas into fees, instead placing temporary holds on transactor balances. We call this *__fee elimination__*, and currently intend to roll Condor out to testnet and the public Casper Network with this strategy active.
+
+The fee elimination strategy, in combination with other features expected to be active on mainnet, replaces fees with holds assessed at a variable ratio of gas units to motes (a dynamic price that depends on congestion and varies within a fixed range). The holds, depending on the chainspec settings, may be released at the end of a predefined timeframe, or on a linear schedule over said timeframe. 
+
+Additionally, the general WASM transactions (note the change of terminology from "deploys") now have a number of lanes to choose from. There is also a lane for native auction interactions, as well as for transfers. With the set of features expected to be active on mainnet, use of the chain induces holds of a quantity of token given by the gas allotted to each slot in that lane, multiplied by the dynamic gas price.
+
+The rationale for placing holds on token instead of taking token as fees is that replacing the nominal cost with opportunity costs (held token cannot be staked) simplifies certain highly desirable ecosystem-building use cases, particularly the operation of Blockchain as a Service providers.
+
+### Implementation
+
+#### Gas holds
+
+#### Cost examples
+
+#### Alternative chainspec parameter settings in Casper 2.0
+
+
 The ultimate goal of any gas mechanism is to prevent exploitation of a network's resources. Aside from incentivizing validators, there is no fundamental reason to charge users for making transactions if their honesty can be guaranteed. By designing a system that disincentivizes wasteful transactions without charging a fee, resistance to exploitation can be maintained while allowing users to transact freely.
 
 Condor proposes the novel method of placing a temporary hold upon the tokens that would otherwise be spent on gas. The duration of gas holds is defined [here](https://github.com/casper-network/casper-node/blob/feat-2.0/resources/production/chainspec.toml#L166) in the [casper-node](https://github.com/casper-network/casper-node) chainspec:
