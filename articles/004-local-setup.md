@@ -204,4 +204,4 @@ This allows you to visually explore blocks, transactions, and other details of y
 
 ## Additional Tips
 
-* **Community Resources:** Join the Casper Telegram for help and discussion.
+* **Community Resources:** Join the [Casper Telegram](https://t.me/CSPRCondor) for help and discussion.
