@@ -1,6 +1,6 @@
 # Fee Elimination on Casper 2.0
 
-The Casper 2.0 (aka Condor) network upgrade introduces new options to the way a Casper Network can be configured to handle gas consumption. Scheduled along with the release of Condor into Mainnet is a change in the configuration of the Casper Network to use a model known as **Fee Elimination** for gas payments. The purpose of this article is to introduce this model, and describe how Fee Elimination will affect the behaviour of the Casper Network once Condor is released.
+The Casper 2.0 (aka Condor) network upgrade introduces new options to the way a Casper Network can be configured to handle gas consumption. Scheduled along with the release of Condor into Mainnet is a change in the configuration of the Casper Network to use a model known as **Fee Elimination** for gas payments. The purpose of this article is to introduce this model, and describe how Fee Elimination will affect the behavior of the Casper Network once Condor is released.
 
 ## Gas
 Public distributed blockchain networks that support smart contracts generally use a concept commonly known as "[gas](https://docs.casper.network/concepts/glossary/G/#gas)", which can be thought of as "the ability to do work on-chain". Gas is acquired in finite quantities and used to meter and limit resource consumption by individual transactors. A transactor's available gas is consumed by their on-chain usage of computation, data storage, and possibly other chain-specific resources. The public Casper Network and its testnet have used such a gas model since their geneses.
