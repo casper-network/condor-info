@@ -83,6 +83,5 @@ Existing host functions used to identify the caller within your contract will co
 
 * **External Contract Interaction:** Other contracts may have updated their interfaces to accept AddressableEntity arguments. Its worth to verify the argument types to avoid potential errors.
 
-**Note:**
-
-* Upgrading a contract to a newer version may involve complexities, such as changes to the contract's addressable hash. These changes might require coordination with centralized and decentralized exchanges, as well as communication with your community to ensure a smooth transition.
+> **Note**
+> * Upgrading a contract to a newer version may involve complexities, such as changes to the contract's addressable hash. These changes might require coordination with centralized and decentralized exchanges, as well as communication with your community to ensure a smooth transition.
