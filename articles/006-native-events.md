@@ -6,10 +6,10 @@ Contract level messages are a facility that enable a smart contract to emit a me
 
 Under certain conditions, a contract may want to emit a message that an off-chain application wants to listen for and react to. Contract-level events are not natively supported in Casper 1.x, so a workaround known as the [Casper Event Standard (CES)](https://github.com/make-software/casper-event-standard) was devised to provide support for events. The CES works by writing events to global state, and having clients consistently poll for new event data as it comes in. While this approach *does* provide the full functionality of events, it is far from optimal due to the following drawbacks:
 
-* Higher gas payments: Gas must be spent to store event data in global state.
-* Reduced security: It is possible in some cases for a malicious actor to overwrite events on the blockchain, leading to uncertainty about an event's reliability when queried off-chain.
-* Permanence: Since with CES events are written directly to global state, they are permanently queryable. Even if the data is deleted or overwritten, the data can be read by providing the [state root hash](https://docs.casper.network/concepts/global-state/) at the block of event emission.
-* Resource intensity: Under the CES, events being written to the blockchain causes the global state to increase in size over time. Additionally, more computation is required to write data to the network than to broadcast it, leading to more expensive transactions.
+* <u>Higher gas payments</u>: Gas must be spent to store event data in global state.
+* <u>Reduced security</u>: It is possible in some cases for a malicious actor to overwrite events on the blockchain, leading to uncertainty about an event's reliability when queried off-chain.
+* <u>Permanence</u>: Since with CES events are written directly to global state, they are permanently queryable. Even if the data is deleted or overwritten, the data can be read by providing the [state root hash](https://docs.casper.network/concepts/global-state/) at the block of event emission.
+* <u>Resource intensity</u>: Under the CES, events being written to the blockchain causes the global state to increase in size over time. Additionally, more computation is required to write data to the network than to broadcast it, leading to more expensive transactions.
 
 In Casper 2.0, native contract-level events have been implemented under [CEP-88](https://github.com/casper-network/ceps/blob/master/text/0088-contract-level-messages.md). CEP-88 establishes a secure, one-way messaging channel between contracts and entities listening to a node's event stream. This standardized method of emitting contract-level events is built into the existing Casper Event Stream, requiring no additional features to Casper's SDKs.
 
