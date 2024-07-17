@@ -4,7 +4,9 @@ Contract level messages are a facility that enable a smart contract to emit a me
 
 ## Motivation
 
-Under certain conditions, a contract may want to emit a message that an off-chain application wants to listen for and react to. Contract-level events are not natively supported in Casper 1.x, so a workaround known as the [Casper Event Standard (CES)](https://github.com/make-software/casper-event-standard) was devised to provide support for events. The CES works by writing events to global state, and having clients consistently poll for new event data as it comes in. While this approach *does* provide the full functionality of events, it is far from optimal due to the following drawbacks:
+Under certain conditions, a contract may want to emit a message that an off-chain application wants to listen for and react to.
+
+Contract-level events are not natively supported in Casper 1.x, so a workaround known as the [Casper Event Standard (CES)](https://github.com/make-software/casper-event-standard) was devised to provide support for events. The CES works by writing events to global state, and having clients consistently poll for new event data as it is emitted. While this approach *does* provide the full functionality of events, it is far from optimal due to the following drawbacks:
 
 * <u>Higher gas payments</u>: Gas must be spent to store event data in global state.
 * <u>Reduced security</u>: It is possible in some cases for a malicious actor to overwrite events on the blockchain, leading to uncertainty about an event's reliability when queried off-chain.
@@ -35,10 +37,36 @@ From a contract point of view, the execution engine exposes new special purpose 
 > [!NOTE]
 > These FFIs are accessible through abstractions in libraries like Casper's contract development library [casper-contract](https://docs.rs/casper-contract/latest/casper_contract/) and [Odra](https://odra.dev/); it is not necessary to invoke the FFI manually.
 
-When a new topic is registered, a checksum is written to global state as opposed to the entirity of the message, saving space and allowing for event verification. Events are identified serially per category per block, for example:
+### Records & Validation
 
-| Block # | Topic      | Event Emitted | Event ID |
-| ------- | ---------- | ------------- | -------- |
-| 123     | ItemSold   | AppleSold     | 1        |
-| 123     | ItemSold   | AppleSold     | 2        |
-| 123     | ItemBought | TomatoBought  | 1        |
+When a new topic is registered, a unique identifier is composed from the address of the caller and the [blake2b](https://docs.casper.network/concepts/glossary/B/#blake2b) hash of the topic name. This key is saved to global state, and can be used to validate events emitted under the topic.
+
+When an event is emitted during execution, a checksum is written to global state as opposed to the entirity of the message. This saves space, supports event validation and obscures the original message. Additionally, a value is incremented representing the order of that event's emission in its topic. Simply put, a `count` is recorded for every emission of an event of a given topic. For example:
+
+| Topic      | Event Emitted | Event-Topic Index | Event-Topic Count |
+| ---------- | ------------- | ----------------- | ----------------- |
+| ItemSold   | AppleSold     | 0                 | 1                 |
+| ItemSold   | AppleSold     | 1                 | 2                 |
+| ItemBought | TomatoBought  | 0                 | 1                 |
+
+*Note: Table signifies the order of transactions of a single block submitted by the proposer from earliest executing to latest.*
+
+When an event is emitted and the **Event-Topic Index** is to be saved, the integer itself is combined with the timestamp of the block (block timestamp), the hash of the topic name, and the address of the contract to create a unique identifier for the event emission. This value is recorded and can be used later to validate an event and its time of emission.
+
+### Transmission
+
+Messages are passed by the execution engine to the node that sends them out on the event stream after execution is complete and committed. The messages sent out on the event stream contain the identity of the entity that emitted the message, the topic on which the message was emitted, the index of the message within the topic and the actual message payload.
+
+### Code Examples
+
+Smart contracts on Casper are most commonly written using the [casper-contract](https://docs.rs/casper-contract/latest/casper_contract/) library or the [Odra](https://odra.dev/) framework, each of which has implemented higher-order functions for creating and emitting messages.
+
+#### casper-contract
+
+Creating a **topic**:
+
+```rust
+```
+
+
+
