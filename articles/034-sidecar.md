@@ -1,6 +1,6 @@
 # Sidecar in Casper 2.0
 
-The Casper Sidecar is a standalone application designed to offload the Casper Node and extend its the capabilities. By acting as an middleman between Casper nodes and clients, it enhances network performance, scalability and flexibility .
+The Casper Sidecar is a standalone application which runs the JSON-RPC service formerly provided as part of the Node itself. This replaces the JSON RPC formerly found on the Casper Node, and extends its the capabilities. By acting as an middleman between Casper nodes and clients applications, it enhances network performance, scalability and flexibility.
 
 ## Key Components
 
