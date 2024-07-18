@@ -6,12 +6,15 @@ The Casper Sidecar is a standalone application which runs the JSON-RPC service f
 
 The Sidecar's primary components:
 
-1.  **SSE (Server-Sent Events) Server:** Mirroring the nodes SSE feed, the Sidecar allows clients to access real-time events without directly interacting with the node. It also stores events in a database for historical analysis and retrieval.
+1.  **SSE (Server-Sent Events) Server:** Mirroring the node's SSE feed, the Sidecar allows clients to access real-time events without directly interacting with the node. It also stores events in a database for historical analysis and retrieval.
 
-2.  **RPC JSON API Server:** This addresses the removal of the JSON-RPC API from Casper nodes (Only the binary RPC will be available in Casper 2.0 nodes) by offering JSON-based RPC interface. This is essential for developers who rely on JSON-RPC.  A key advantage of this server is its ability to be updated independently of the Casper node software, allowing for rapid development and bug fixes without network downtime.
+2.  **RPC JSON API Server:** This addresses the removal of the JSON-RPC API from Casper nodes (Only the binary RPC will be available in Casper 2.0 nodes) by offering JSON-based RPC interface. This is essential for developers who rely on JSON-RPC.  A key advantage of this server is its ability to be updated independently of the Casper node software, allowing for rapid development and bug fixes without network downtime.  
+
+![image](./034-sidecar-files/SidecarDiagram.png)
 
 **Important Note:**
 >  Sidecar can connect to multiple nodes for the SSE feed, consolidating events from various sources into one stream. However, it connects only to a single node for RPC API requests
+
 
 ## Implications for Developers
 
