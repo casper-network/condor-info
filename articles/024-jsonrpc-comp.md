@@ -15,9 +15,7 @@ The Sidecar is basically a companion to the node, which exposes the node JSON RP
 In practice, we expect that most people will see very little change in how they think about and consume RPC functionality, if that is their primary objective. Most node operators will operate a sidecar process on the same machine, and the dApp developer will see no difference in how they call it. However, any discussion of the JSON RPC changes for Condor would be remiss not to mention this development. That said, the existence of the sidecar has practically no relevance to those interested only in *consuming* the RPC's features, and who have no interest in the Binary Port. It does, however, have relevance for those running a Casper Node, or who wish to avail of the fine-grained control particular to the binary port. 
 
 ### The Binary Port
-
-Condor exposes a Binary Port interface, which allows connection over TCP/IP and pure binary serialization for your remote procedure calls. Depending on your use case, you may be interested in considering this option for interacting with Casper Condor. A discussion of the Binary Port is beyond the scope of this article. 
-
+Condor exposes a Binary Port interface, which allows connection over TCP/IP and pure binary serialization for your remote procedure calls. Depending on your use case, you may be interested in considering this option for interacting with Casper Condor. In general, the binary port offers better performance and features compared to the JSON RPC.  A detailed discussion of the Binary Port will be contained in a future article. 
 
 #### Differences in the JSON-RPC 
 The biggest immediately obvious change in the RPC is the change in name from deploy to transaction. casper 1.5 used the name "deploy" for a unit of work submitted to the blockchain. Condor renames this metaphor to "Transaction". 
@@ -34,14 +32,14 @@ The full schema definition for the Condor JSON-RPC is [here](./024-jsonrpc-comp/
 
 | Function in v1.5                      | Function in v2.0                      |Remarks|
 | ---                                   | ---                                   | --- |
-| [account_put_deploy](./024-jsonrpc-comp/rpc-1.5/account_put_deploy.json)                                      | [account_put_transaction](./024-jsonrpc-comp/rpc-2.0/account_put_transaction.json)                            | Renamed |  
+| [account_put_deploy](./024-jsonrpc-comp/rpc-1.5/account_put_deploy.json)                                      | [account_put_transaction](./024-jsonrpc-comp/rpc-2.0/account_put_transaction.json)                            | [Renamed](./024-jsonrpc-comp/account_put_transaction.md)     |  
 | [chain_get_block_transfers](./024-jsonrpc-comp/rpc-1.5/chain_get_block_transfers.json)                        | [chain_get_block_transfers](./024-jsonrpc-comp/rpc-2.0/chain_get_block_transfers.json)                        | Unchanged     |
 | [chain_get_block](./024-jsonrpc-comp/rpc-1.5/chain_get_block.json)                                            | [chain_get_block](./024-jsonrpc-comp/rpc-2.0/chain_get_block.json)                                            | Now returns Block with Signatures         |
 | [chain_get_era_info_by_switch_block](./024-jsonrpc-comp/rpc-1.5/chain_get_era_info_by_switch_block.json)      | [chain_get_era_info_by_switch_block](./024-jsonrpc-comp/rpc-2.0/chain_get_era_info_by_switch_block.json)      | Unchanged     |
 | [chain_get_era_summary](./024-jsonrpc-comp/rpc-1.5/chain_get_era_summary.json)                                | [chain_get_era_summary](./024-jsonrpc-comp/rpc-2.0/chain_get_era_summary.json)                                | Unchanged     |
 | [chain_get_state_root_hash](./024-jsonrpc-comp/rpc-1.5/chain_get_state_root_hash.json)                        | [chain_get_state_root_hash](./024-jsonrpc-comp/rpc-2.0/chain_get_state_root_hash.json)                        | Unchanged     |
 | [info_get_chainspec](./024-jsonrpc-comp/rpc-1.5/info_get_chainspec.json)                                      | [info_get_chainspec](./024-jsonrpc-comp/rpc-2.0/info_get_chainspec.json)                                      | Unchanged     |
-| [info_get_deploy](./024-jsonrpc-comp/rpc-1.5/info_get_deploy.json)                                            | [info_get_transaction](./024-jsonrpc-comp/rpc-2.0/info_get_transaction.json)                                  | [Renamed & type changes](./024-jsonrpc-comp/info_get_transaction.md)    |
+| [info_get_deploy](./024-jsonrpc-comp/rpc-1.5/info_get_deploy.json)                                            | [info_get_transaction](./024-jsonrpc-comp/rpc-2.0/info_get_transaction.json)                                  | [Renamed](./024-jsonrpc-comp/info_get_transaction.md)    |
 | [info_get_peers](./024-jsonrpc-comp/rpc-1.5/info_get_peers.json)                                              | [info_get_peers](./024-jsonrpc-comp/rpc-2.0/info_get_peers.json)                                              | Unchanged     |
 | [info_get_status](./024-jsonrpc-comp/rpc-1.5/info_get_status.json)                                            | [info_get_status](./024-jsonrpc-comp/rpc-2.0/info_get_status.json)                                            | Latest switch block hash included in result     |
 | [info_get_validator_changes](./024-jsonrpc-comp/rpc-1.5/info_get_validator_changes.json)                      | [info_get_validator_changes](./024-jsonrpc-comp/rpc-2.0/info_get_validator_changes.json)                      | Unchanged     |
