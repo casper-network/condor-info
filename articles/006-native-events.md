@@ -15,7 +15,7 @@ Contract-level events are not natively supported in Casper 1.x, so a workaround 
 
 In Casper 2.0, native contract-level events have been implemented under [CEP-88](https://github.com/casper-network/ceps/blob/master/text/0088-contract-level-messages.md). CEP-88 establishes a secure, one-way messaging channel between contracts and entities listening to a node's event stream. This standardized method of emitting contract-level events is built into the existing Casper Event Stream, requiring no additional features to Casper's SDKs.
 
-## Emitting Events
+## Design
 
 ### FFIs
 
@@ -57,7 +57,7 @@ When an event is emitted and the **Event-Topic Index** is to be saved, the integ
 
 Messages are passed by the execution engine to the node that sends them out on the event stream after execution is complete and committed. The messages sent out on the event stream contain the identity of the entity that emitted the message, the topic on which the message was emitted, the index of the message within the topic and the actual message payload.
 
-### Code Examples
+## Emitting Events
 
 Smart contracts on Casper are most commonly written using the [casper-contract](https://docs.rs/casper-contract/latest/casper_contract/) library or the [Odra](https://odra.dev/) framework, each of which has implemented higher-order functions for creating and emitting messages.
 
@@ -66,7 +66,49 @@ Smart contracts on Casper are most commonly written using the [casper-contract](
 Creating a **topic**:
 
 ```rust
+use casper_types::contract_messages::MessageTopicOperation;
+
+let topic = "greetings";
+
+runtime::manage_message_topic(topic, MessageTopicOperation.Add)
+	.unwrap_or_revert();
 ```
 
+Emitting an event:
 
+```rust
+runtime::emit_message(topic, &"Hello World!".to_string().into())
+	.unwrap_or_revert();
+```
 
+You can explore the `manage_message_topic` and `emit_message` functions [here](https://github.com/casper-network/casper-node/blob/release-2.0.0-rc3/smart_contracts/contract/src/contract_api/runtime.rs#L489-L527).
+
+## Observing Events
+
+Events can be consumed client-side by listening to the event stream of an active node. Casper's SDKs include functions that make it easy to subscribe to an event stream and consume its inbound data. Listening for contract-level events will require subscribing to the *TransactionProcessed* channel:
+
+```javascript
+const { EventStream, EventName } = require("casper-js-sdk");
+const CHANNEL = "TransactionProcessed";
+const es = new EventStream("http://NODE_ADDRESS:9999/events/" + CHANNEL);
+es.start();
+es.subscribe(EventName.TRANSACTION_PROCESSED, eventHandler);
+
+const eventHandler = (event) => {
+    console.log(event);
+};
+```
+
+Your event can then be discovered by checking for the topic name on the contract that emitted the event:
+
+```javascript
+const eventHandler = (event) => {
+    if (event.body.TransactionProcessed.event) {
+        // Perform an action
+    }
+};
+```
+
+## Final Thoughts
+
+Before Casper 2.0, it was not possible to emit conract-level events directly through Casper's event stream. The Casper Event Standard was devised to provide a solution for event emission and observation, but it proved to be non-optimal when it came to security, privacy and cost. Casper 2.0 introduces native contract-level events, subverting the need for the CES and making it easy to send messages from the Casper Network to the outside world. Casper's SDKs also already have the functionality to handle incoming messages on the event stream, so refactoring your code to support native events is expected to be seamless. By integrating Casper's native contract-level events into your application, your users' experience will be more fluid, protected, and less resourcefully expensive.
