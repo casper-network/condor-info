@@ -43,11 +43,11 @@ When a new topic is registered, a unique identifier is composed from the address
 
 When an event is emitted during execution, a checksum is written to global state as opposed to the entirity of the message. This saves space, supports event validation and obscures the original message. Additionally, a value is incremented representing the order of that event's emission in its topic. Simply put, a `count` is recorded for every emission of an event of a given topic. For example:
 
-| Topic      | Event Emitted | Event-Topic Index | Event-Topic Count |
-| ---------- | ------------- | ----------------- | ----------------- |
-| ItemSold   | AppleSold     | 0                 | 1                 |
-| ItemSold   | AppleSold     | 1                 | 2                 |
-| ItemBought | TomatoBought  | 0                 | 1                 |
+| Topic    | Event Emitted | Event-Topic Index | Event-Topic Count |
+| -------- | ------------- | ----------------- | ----------------- |
+| ItemSold | AppleSold     | 0                 | 1                 |
+| ItemSold | AppleSold     | 1                 | 2                 |
+| ItemSold | BananaSold    | 0                 | 1                 |
 
 *Note: Table signifies the order of transactions of a single block submitted by the proposer from earliest executing to latest.*
 
