@@ -5,7 +5,8 @@
         "args",
         "entry_point",
         "scheduling",
-        "target"
+        "target",
+        "transaction_category"
     ],
     "properties": {
         "args": {
@@ -16,6 +17,11 @@
         },
         "entry_point": {
             "$ref": "#/components/schemas/TransactionEntryPoint"
+        },
+        "transaction_category": {
+            "type": "integer",
+            "format": "uint8",
+            "minimum": 0
         },
         "scheduling": {
             "$ref": "#/components/schemas/TransactionScheduling"

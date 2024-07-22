@@ -54,19 +54,10 @@
                 "Session": {
                     "type": "object",
                     "required": [
-                        "kind",
                         "module_bytes",
                         "runtime"
                     ],
                     "properties": {
-                        "kind": {
-                            "description": "The kind of session.",
-                            "allOf": [
-                                {
-                                    "$ref": "#/components/schemas/TransactionSessionKind"
-                                }
-                            ]
-                        },
                         "module_bytes": {
                             "description": "The compiled Wasm.",
                             "allOf": [

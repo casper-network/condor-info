@@ -39,7 +39,7 @@
             "additionalProperties": false
         },
         {
-            "description": "The cost of the transaction is determined by the cost table, per the transaction kind.",
+            "description": "The cost of the transaction is determined by the cost table, per the transaction category.",
             "type": "object",
             "required": [
                 "Fixed"
