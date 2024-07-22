@@ -70,7 +70,7 @@ use casper_types::contract_messages::MessageTopicOperation;
 
 let topic = "greetings";
 
-runtime::manage_message_topic(topic, MessageTopicOperation.Add)
+runtime::manage_message_topic(topic, MessageTopicOperation::Add)
 	.unwrap_or_revert();
 ```
 
@@ -89,21 +89,24 @@ Events can be consumed client-side by listening to the event stream of an active
 
 ```javascript
 const { EventStream, EventName } = require("casper-js-sdk");
-const CHANNEL = "TransactionProcessed";
-const es = new EventStream("http://NODE_ADDRESS:9999/events/" + CHANNEL);
-es.start();
-es.subscribe(EventName.TRANSACTION_PROCESSED, eventHandler);
+const es = new EventStream("http://NODE_ADDRESS:9999/events/");
 
 const eventHandler = (event) => {
     console.log(event);
 };
+
+es.start();
+es.subscribe("TransactionProcessed", eventHandler);
 ```
 
 Your event can then be discovered by checking for the topic name on the contract that emitted the event:
 
 ```javascript
 const eventHandler = (event) => {
-    if (event.body.TransactionProcessed.event) {
+    const contractHash = event.body.TransactionProcessed.messages[0].entity_hash;
+    const topic = event.body.TransactionProcessed.messages[0].topic_name;
+
+    if (isCorrect(contractHash) && isCorrect(topic)) {
         // Perform an action
     }
 };
