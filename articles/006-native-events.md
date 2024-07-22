@@ -103,8 +103,9 @@ Your event can then be discovered by checking for the topic name on the contract
 
 ```javascript
 const eventHandler = (event) => {
-    const contractHash = event.body.TransactionProcessed.messages[0].entity_hash;
-    const topic = event.body.TransactionProcessed.messages[0].topic_name;
+    const firstEventOfBlock = event.body.TransactionProcessed.messages[0];
+    const contractHash = firstEventOfBlock.entity_hash;
+    const topic = firstEventOfBlock.topic_name;
 
     if (isCorrect(contractHash) && isCorrect(topic)) {
         // Perform an action
