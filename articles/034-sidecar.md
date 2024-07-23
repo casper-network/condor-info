@@ -60,4 +60,4 @@ The Casper 2.0 Sidecar represents a significant architectural change. By decoupl
 
 * [Sidecar Repository](https://github.com/casper-network/casper-sidecar)
 * [Sidecar Usage Guide](https://github.com/casper-network/casper-sidecar/blob/dev/USAGE.md)
-* [Sidecar Docker Image](docker image link)
+* [Sidecar Docker Image (coming soon)](URL)
