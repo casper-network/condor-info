@@ -10,7 +10,27 @@ The Sidecar's primary components:
 
 2.  **RPC JSON API Server:** This addresses the removal of the JSON-RPC API from Casper nodes (Only the binary RPC will be available in Casper 2.0 nodes) by offering JSON-based RPC interface. This is essential for developers who rely on JSON-RPC.  A key advantage of this server is its ability to be updated independently of the Casper node software, allowing for rapid development and bug fixes without network downtime.  
 
-![image](./034-sidecar-files/SidecarDiagram.png)
+```mermaid
+---
+title: The Casper Sidecar Components
+---
+   graph LR;
+   subgraph CASPER_SIDECAR
+      SSE_SERVER["SSE server"]
+      RPC_API_SERVER["RPC API server (JSON)"]
+      REST_API["Rest API server"]
+      ADMIN_API["Admin API server"]
+   end
+   CONFIG{{"Config file (TOML)"}}
+   CONFIG --> CASPER_SIDECAR
+   STORAGE[(Storage)]
+   NODE_SSE(("Casper node SSE port"))
+   NODE_BINARY(("Casper node binary port"))
+   RPC_API_SERVER --> NODE_BINARY
+   SSE_SERVER --> NODE_SSE
+   SSE_SERVER --> STORAGE
+   STORAGE --> REST_API
+```
 
 **Important Note:**
 >  Sidecar can connect to multiple nodes for the SSE feed, consolidating events from various sources into one stream. However, it connects only to a single node for RPC API requests
