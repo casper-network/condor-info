@@ -20,7 +20,7 @@ jobs:
         if: github.ref_type == 'branch' || github.ref_type == 'pull_request'
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          regex: '^(feat|issue|fix|exp)\/([a-z0-9]+)\/([0-9]+)-([a-z0-9]+)$'
+          regex: '^(feat|issue|fix|exp)\/([a-z0-9]+)\/([0-9]+)-([a-z0-9]+)'
           # flags: i
           # token: ${{ secrets.REPO_TOKEN }}
           # delete: true
