@@ -4,7 +4,7 @@
 
 This article is intended for developers consuming the Casper 2.0 (AKA Condor) JSON RPC, such as dApp developers, SDK developers, or others relying on the JSON-RPC API. In this article we examine the JSON-RPC  and break down the [differences between v1.5.6 and v2.0.0](#differences-between-v15-and-v20).
 
-Since the network's inception, the Casper node has exposed an API over HTTP, using JSON, which is known as the JSON-RPC. This API allows client software such as dApps and SDKs to communicate and interact with the node, giving access to query node state, chain state, balance details and other information, as well as write information to the chain by submitting transactions.  
+Since the network's inception, the Casper node has exposed an API over HTTP, using JSON, which is known as the JSON-RPC. This API allows client software such as dApps and SDKs to communicate and interact with the node, giving access to query node state, chain state, balance details and other information, as well as to write information to the chain by submitting transactions.  
 
 ## Changes for v2.0
 
@@ -12,9 +12,12 @@ Since the network's inception, the Casper node has exposed an API over HTTP, usi
 
 One of the major changes in the Condor upgrade is the new [casper-sidecar](https://github.com/casper-network/casper-sidecar). The sidecar runs in a **dedicated** process and and is bound to a node's binary port and/or SSE port.  The sidecar assumes **all** responsibility for running the JSON-RPC server and exposing the JSON-RPC endpoints to the internet, i.e. the node software itself no longer exposes a JSON RPC API to the consumer - <u>this job is now done by the sidecar</u>.  
 
-It may be observed that as the sidecar runs in a dedicated process, it is therefore possible to run a sidecar upon a different machine as the node.  However in practice, most node operators will likely operate a sidecar process on the same machine as the node.  Furthermore an operator's deployment setup is opaque to to a DApp that interacts with the JSON-RPC API via an SDK.  
+Because the sidecar runs in a dedicated process, it is possible to run a sidecar upon a different machine to the node.  However in practice, most node operators will likely operate a sidecar process on the same machine as the node.  Furthermore an operator's deployment setup is opaque to to a DApp that interacts with the JSON-RPC API via an SDK.  
 
-There are benefits to moving the JSON-RPC API to a sidecar.  First of all the JSON-RPC API can evolve independently of the node.  Secondly an operator has a finer degree of control over their operational setup.  Thirdly the sidecar reduces the amount of work that the node itself has to do, thereby simplifying the deployment of alternative node implementations (e.g. mojo, go, zig, c++).
+There are several benefits to moving the JSON-RPC API to a sidecar:  
+- The JSON-RPC API can now evolve independently of the node  
+- A node operator now has a finer degree of control over their operational setup
+- The sidecar reduces the amount of work that the node itself has to do, thereby simplifying the deployment of alternative node implementations (e.g. mojo, go, zig, c++)
 
 ### Node Binary Port
 
