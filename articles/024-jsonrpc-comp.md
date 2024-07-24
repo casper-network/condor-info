@@ -1,4 +1,4 @@
-# JSON-RPC API Changes from Casper 1.x to Casper 2.0 
+# Casper 1.X -> Casper 2.0 :: JSON-RPC API changes  
 
 ## Introduction
 
