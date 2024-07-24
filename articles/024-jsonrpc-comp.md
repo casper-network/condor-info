@@ -17,6 +17,9 @@ In practice, we expect that most people will see very little change in how they 
 ### The Binary Port
 Condor exposes a Binary Port interface, which allows connection over TCP/IP and pure binary serialization for your remote procedure calls. Depending on your use case, you may be interested in considering this option for interacting with Casper Condor. In general, the binary port offers better performance and features compared to the JSON RPC.  A detailed discussion of the Binary Port will be contained in a future article. 
 
+### Server Side Events
+Casper 2.0 introduces Native Contract Events as described in [CEP 88](https://github.com/casper-network/ceps/blob/master/text/0088-contract-level-messages.md). CEP-88 establishes a secure, one-way messaging channel between contracts and entities listening to a node's event stream. The node itself exposes these events on its SSE stream, but the Sidecar also exposes the same stream. This gives developers or any other consumers of the Event Stream the opportunity to choose between consuming the event stream from a single node or from a Sidecar instance, which may subscribe to multiple nodes to improve availability and uptime. 
+
 #### Differences in the JSON-RPC 
 The biggest immediately obvious change in the RPC is the change in name from deploy to transaction. casper 1.5 used the name "deploy" for a unit of work submitted to the blockchain. Condor renames this metaphor to "Transaction". 
 
@@ -53,3 +56,9 @@ The full schema definition for the Condor JSON-RPC is [here](./024-jsonrpc-comp/
 | [state_get_item](./024-jsonrpc-comp/rpc-1.5/state_get_item.json)                                              | [state_get_entity](./024-jsonrpc-comp/rpc-2.0/state_get_entity.json)                                          | Renamed    |
 
 
+---
+## Summary
+The major changes in the JSON-RPC between v1.5.6 and v2.0.0 are:
+- The JSON-RPC api is now served from the Casper Sidecar. 
+- Deploys are now Transactions. There are some differences in the representation of these objects
+- The Sidecar also exposes the Server Side Event stream, which, while not strictly part of the JSON-RPC api, is relevant to many developers who previously relied on the Casper Event Standard (CES). 
