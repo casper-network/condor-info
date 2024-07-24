@@ -55,3 +55,11 @@ See [here](./024-jsonrpc-comp/rpc-2.0/schema.json) for Casper 2.0 node JSON-RPC.
 | [state_get_item](./024-jsonrpc-comp/rpc-1.5/state_get_item.json)                                              | [state_get_entity](./024-jsonrpc-comp/rpc-2.0/state_get_entity.json)                                          | Renamed    |
 
 
+---
+## Summary
+
+The major changes in the JSON-RPC between v1.5.6 and v2.0.0 are:
+
+- The [casper-sidecar](https://github.com/casper-network/casper-sidecar) is now responsible for serving the JSON-RPC API.
+- The sidecar may also expose the Server Side Events API, this is of some relevance to developers relying upon the Casper Event Standard (CES).
+- Deploys are now called Transactions as per the industry norm.  There are differences in the representation of these data structures.
