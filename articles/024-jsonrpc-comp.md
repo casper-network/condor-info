@@ -8,27 +8,29 @@ Since the network's inception, the Casper node has exposed an API over HTTP, usi
 
 ## Changes for v2.0
 
-### The Casper Sidecar
-One of the major changes in the Condor upgrade is the Casper Sidecar. The Sidecar is a separate process which runs on the same machine as the takes responsibility for running the RPC server and exposing the RPC endpoints to the Internet. 
-The Sidecar is basically a companion to the node, which exposes the node JSON RPC while running in a separate process. What this means is, the node software itself no longer exposes a JSON RPC API to the consumer. This job is done by the Sidecar. 
+### Casper Sidecar
 
-In practice, we expect that most people will see very little change in how they think about and consume RPC functionality, if that is their primary objective. Most node operators will operate a sidecar process on the same machine, and the dApp developer will see no difference in how they call it. However, any discussion of the JSON RPC changes for Condor would be remiss not to mention this development. That said, the existence of the sidecar has practically no relevance to those interested only in *consuming* the RPC's features, and who have no interest in the Binary Port. It does, however, have relevance for those running a Casper Node, or who wish to avail of the fine-grained control particular to the binary port. 
+One of the major changes in the Condor upgrade is the new [casper-sidecar](https://github.com/casper-network/casper-sidecar). The sidecar runs in a **dedicated** process and and is bound to a node's binary port and/or SSE port.  The sidecar assumes **all** responsibility for running the JSON-RPC server and exposing the JSON-RPC endpoints to the internet, i.e. the node software itself no longer exposes a JSON RPC API to the consumer - <u>this job is now done by the sidecar</u>.  
 
-### The Binary Port
-Condor exposes a Binary Port interface, which allows connection over TCP/IP and pure binary serialization for your remote procedure calls. Depending on your use case, you may be interested in considering this option for interacting with Casper Condor. In general, the binary port offers better performance and features compared to the JSON RPC.  A detailed discussion of the Binary Port will be contained in a future article. 
+It may be observed that as the sidecar runs in a dedicated process, it is therefore possible to run a sidecar upon a different machine as the node.  However in practice, most node operators will likely operate a sidecar process on the same machine as the node.  Furthermore an operator's deployment setup is opaque to to a DApp that interacts with the JSON-RPC API via an SDK.  
 
-#### Differences in the JSON-RPC 
-The biggest immediately obvious change in the RPC is the change in name from deploy to transaction. casper 1.5 used the name "deploy" for a unit of work submitted to the blockchain. Condor renames this metaphor to "Transaction". 
+There are benefits to moving the JSON-RPC API to a sidecar.  First of all the JSON-RPC API can evolve independently of the node.  Secondly an operator has a finer degree of control over their operational setup.  Thirdly the sidecar reduces the amount of work that the node itself has to do, thereby simplifying the deployment of alternative node implementations (e.g. mojo, go, zig, c++).
 
+### Node Binary Port
 
-### Casper 1.x JSON-RPC Schema definition. 
-The full schema definition of the Casper 1.x node JSON-RPC may be found [here](./024-jsonrpc-comp/rpc-1.5/schema.json)
+The Casper 2.0 Node now exposes a pure Binary Port API, which allows connection over TCP/IP and pure binary serialization for your remote procedure calls.  Depending on your use case, you may be interested in considering this option for interacting with Casper Condor. In general, the binary port offers better performance and features compared to the JSON RPC.  A detailed discussion of the Binary Port will be contained in a future article.  It is anticipated that all SDKs will be updated so as to support the new Binary Port API.
 
+#### JSON-RPC Differences  
 
-### Casper 2.0 (Condor) JSON-RPC Schema Definition
-The full schema definition for the Condor JSON-RPC is [here](./024-jsonrpc-comp/rpc-2.0/schema.json)
+The biggest immediately obvious change in the RPC is the change in name from deploy to transaction.  Casper 1.X used the name "deploy" for a unit of work submitted to the blockchain, in Condor a unit of work is now renamed as "Transaction". 
 
-## Differences between v1.5 and v2.0
+### JSON-RPC Schema Definitions
+
+See [here](./024-jsonrpc-comp/rpc-1.5/schema.json) for Casper 1.5 node JSON-RPC.
+
+See [here](./024-jsonrpc-comp/rpc-2.0/schema.json) for Casper 2.0 node JSON-RPC.
+
+## Table of v1.5 & v2.0 JSON-RPC API differences
 
 | Function in v1.5                      | Function in v2.0                      |Remarks|
 | ---                                   | ---                                   | --- |
