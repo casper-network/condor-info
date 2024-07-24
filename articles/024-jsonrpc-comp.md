@@ -1,4 +1,4 @@
-# A comparison of the node JSON-RPC from Casper 1.x to Casper 2.0 (Condor)
+# JSON-RPC API Changes from Casper 1.x to Casper 2.0 
 
 ## Introduction
 
