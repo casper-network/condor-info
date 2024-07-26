@@ -7,6 +7,10 @@
 ---
 ## List of PRs
 ### Node
+
+* [4816](https://github.com/casper-network/casper-node/pull/4816)	Return the switch block hash with rewards response  
+    Adds a new field to enable users to retrieve the block at which rewards were distributed
+
 * [4750](https://github.com/casper-network/casper-node/pull/4750)	Add a decode subcommand to global-state-update-gen  
     This adds a new subcommand to global-state-update-gen that aids in debugging, to be called with:
     `global-state-update-gen decode global_state.toml`. The command reads the generated global_state.toml, deserializes the entries and prints them out in the Debug format. This makes the contents of the file more human-readable, helping in analyzing it.
