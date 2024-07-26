@@ -8,6 +8,8 @@
 ## List of PRs
 ### Node
 
+* [4817](https://github.com/casper-network/casper-node/pull/4817)	Add an error code for purse not found for balance requests  
+    
 * [4816](https://github.com/casper-network/casper-node/pull/4816)	Return the switch block hash with rewards response  
     Adds a new field to enable users to retrieve the block at which rewards were distributed
 
@@ -128,7 +130,7 @@ in
 
 
 ### Sidecar
-* [335](https://github.com/casper-network/casper-sidecar/pull/335)  Bump dependencies for binary port and types 
-
-    This PR bumps the "binary port" and "types" dependencies so that the sidecar can understand the recently added binary port [error codes (#4761)](#4761).
-
+* [335](https://github.com/casper-network/casper-sidecar/pull/335)  Bump dependencies for binary port and types   
+This PR bumps the "binary port" and "types" dependencies so that the sidecar can understand the recently added binary port error codes.
+* [336](https://github.com/casper-network/casper-sidecar/pull/336)   Return the switch block hash with rewards response  
+Sidecar side of [#4816](https://github.com/casper-network/casper-node/pull/4816)
