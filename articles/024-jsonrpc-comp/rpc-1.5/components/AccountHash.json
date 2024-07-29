@@ -1,0 +1,4 @@
+{
+    "description": "Hex-encoded account hash.",
+    "type": "string"
+}

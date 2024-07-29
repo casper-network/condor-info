@@ -1,0 +1,4 @@
+{
+    "description": "Decimal representation of a 512-bit integer.",
+    "type": "string"
+}
