@@ -6,15 +6,18 @@ Casper 2.0 introduces a significant upgrade to its node communication: the binar
 
 The adoption of a binary RPC protocol brings several benefits to the Casper network:
 
-* **Reduced Network Congestion**: The compact nature of binary encoding leads to smaller message sizes, decreasing bandwidth consumption and network strain. This is particularly valuable in scenarios with high transaction volumes or limited bandwidth. This is particulary important for communication between the nodes themselves.
+* **Reduced Network Congestion**: The compact nature of binary encoding leads to smaller message sizes, decreasing bandwidth consumption and network strain. This is particularly valuable in scenarios with high transaction volumes or limited bandwidth.
 * **Improved Node Responsiveness**: While the node still needs to process requests, binary data is often faster to handle than JSON. This can lead to quicker response times from the node, enhancing overall network performance
 * **Scalability**: The efficiency gains from binary communication contribute to the network ability to scale and handle increased transaction loads without sacrificing performance.
+* **Efficient Data Retrieval**: The binary port allows querying raw data directly from the database. This means the node can provide raw bytes from storage without the overhead of deserialization, further contributing to performance improvements, especially for large data requests.
 
 ## Binary RPC and the Sidecar
 
 In Casper 2.0, the newly introduced Sidecar plays a crucial role. It acts as a bridge between external clients using JSON-RPC and the node's binary port. This setup ensures compatibility with existing tools while leveraging the performance benefits of the binary protocol.
 
 The sidecar translates JSON-RPC requests into binary requests for the node and converts binary responses back into JSON for the client.
+
+Decoupling the RPC interface from the node allows for greater flexibility. The client-facing RPC interface can be extended or modified without requiring a protocol upgrade on the entire network. This enables faster iteration and adaptation.
 
 ## Direct Binary Communication
 
@@ -23,8 +26,6 @@ Future Casper SDKs will allow clients to communicate directly with the node's bi
 * **Enhanced Performance**: Eliminating the sidecar's translation step can further reduce latency and improve overall communication speed.
 * **Simplified Architecture**: Direct communication reduces complexity, leading to a more streamlined and maintainable system.
 * **Greater Control**: Developers gain more granular control over their interactions with the node, opening doors for optimization and customization.
-
-## TODO: more info about how the nodes communicate with each other?
 
 ## Example: Sending a Transaction
 
