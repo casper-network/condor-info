@@ -1,6 +1,6 @@
 # Binary Port in Casper 2.0
 
-Casper 2.0 introduces a significant upgrade to its node communication: the binary port. This new RPC interface replaces the traditional JSON-RPC with a binary protocol. The result is faster, more efficient communication between the nodes and the applications within the network.
+Casper 2.0 introduces a significant upgrade to its node communication: the binary port. This new interface replaces the traditional JSON-RPC with a binary protocol. The result is faster, more efficient communication between the nodes and the applications within the network.
 
 ## Advantages
 
@@ -24,9 +24,9 @@ Future Casper SDKs will allow clients to communicate directly with the node's bi
 * **Simplified Architecture**: Direct communication reduces complexity, leading to a more streamlined and maintainable system.
 * **Greater Control**: Developers gain more granular control over their interactions with the node, opening doors for optimization and customization.
 
-## TODO: more info about how the nodes comunicate with each other?
+## TODO: more info about how the nodes communicate with each other?
 
-## Example: Seding a Transaction
+## Example: Sending a Transaction
 
 Lets illustrate the workflow of using the binary port with a simplified example of sending a native transfer transaction.
 
