@@ -33,6 +33,15 @@ Lets illustrate the workflow of using the binary port with a simplified example 
 
 ### Flow with Sidecar:
 
+```mermaid
+sequenceDiagram
+    Client->Sidecar: JSON-RPC Request
+    Sidecar->>Node: Binary Request
+    Node->>Node: Process Request
+    Node->>Sidecar: Binary Response
+    Sidecar->>Client: JSON-RPC Response
+```
+
 1. **Construct JSON Request:** The client constructs a JSON-RPC request containing the transaction details.
 2. **Send to Sidecar:** The request is sent to the sidecar over HTTP.
 3. **Sidecar to Node (Binary)**: The sidecar translates the JSON request into a binary request and sends it to the node's binary port.
@@ -41,6 +50,13 @@ Lets illustrate the workflow of using the binary port with a simplified example 
 6. **Sidecar to Client (JSON):** The sidecar translates the binary response into a JSON response and sends it back to the client.
 
 ### Flow with Direct Binary Communication:
+
+```mermaid
+sequenceDiagram
+    Client->>Node: Binary Request
+    Node->>Node: Process Request
+    Node->>Client: Binary Response
+```
 
 1. **Construct Binary Request:** The client directly constructs a binary request containing the transaction details using the appropriate SDK.
 2. **Send to Node (Binary)**: The request is sent directly to the node's binary port over TCP.
