@@ -2,7 +2,9 @@
 
 ## Summary
 
+### TODO: Contact Ed H. for Executive Summary of this update.
 
+## TODO: get information from Joe S about mainnet data being ported to devnet
 
 ---
 ## List of PRs
