@@ -168,6 +168,6 @@ Thank you,
 
 ### Exhaustive list of PRs in this release:
 
-Click [here for a list](./all-prs-md) of all the PRs contained in this release.
+Click [here for a list](./all-prs.md) of all the PRs contained in this release.
 
 
