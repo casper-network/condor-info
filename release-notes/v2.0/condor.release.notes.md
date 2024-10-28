@@ -83,10 +83,48 @@ There are three fundamental types of Addressable Entity:
 ##### Account Unification upgrade path
 This feature is a fundamental change to the way that smart contracts interact with the network and each other. Moving to this feature requires that applications using smart contracts must analyse, rework and retest their code in order to ensure that their applications will work as intended. Therefore, the initial release of Condor will not turn this feature on. At some point in the future, once agreed by the people participating in the network, an update to the network will be issued which activates this feature. This step will not be reversible. 
 
+### Fee Elimination
+
+Scheduled along with the release of Caper 2.0 is a change in the configuration of the Casper Network to use a model known as **Fee Elimination** for gas payments. 
+
+> __Fee Elimination is the strategy of placing temporary holds on transactor balances corresponding to their incurred gas costs, instead of taking those costs from their on-chain balances__.
+
+Under 1.x, transactors must pay for gas directly from their purse balances. With Fee Elimination on Casper 2.0, a hold is placed on the calculated **Gas Cost** for a configurable period of time known as the **Hold Period**. Fees are therefore not forfeited by transactors, and funds are not spent to execute transactions. The scheduled release of funds placed under a hold in this way is governed by the configuration of the chainspec. There are two options:
+
+#### Accrued
+100% of the hold is held until the hold expires. At any given point in the duration of the hold, the effective amount of the hold is 100%. At expiry, all of the funds are again made available to the transactor.
+
+#### Amortized
+The effective amount of the hold is reduced linearly over the course of the hold duration. At any point in the duration of the hold, the effective hold *amount* is proportional to the percentage of the hold *duration* that remains before expiry. 
+
+### Virtual Machine 2.0
+
+In Casper 2.0, we are introducing a change to the execution engine which allows transactors to specify which of many possible VMs they wish to target with their transaction. The current Casper VM will remain, and for the initial 2.0 release the new VM will not be enabled. We expect to enable VM 2.0 in a subsequent release cycle.  
+‍
+Among the improvements in VM 2.0 are: 
+
+- Removal of URefs. URefs are complicated, hard to track, and ultimately unnecessary for most contracts.
+- An improved Smart Contract programming model with an emphasis on high-level logic in place of low-level implementation details, leading to improved maintainability and more concise code.
+- Backwards compatibility: VM2.0 contracts can call VM 1.X contracts, allowing the two systems to coexist during the transition period. 
+- Transferable entry points, which allow sending tokens directly to contract entry points without needing a custom session code.
+- VM2.0 code will all be valid Rust code, which allows it to execute without a complex system of test infrastructure and improves testability.
+- Imeplemntation of some features which are familiar from other chains such as the `payable` keyword
+- Schema generation from smart contracts, paving the way for improvements in tooling, discoverability and maintainability.
+- Improved Smart Contract upgrade process.
+
+### FFI Enhancements
+Casper 2.0 FFI introduces access to some additional hashing algorithms, as well as providing access to information about the block info, including hash and parent block hash. 
+
+### Userland CSPR Burning
+In Casper 2.0 user contracts can burn CSPR token. This represents a significant change to the tokenomics of Casper 1.X
+>TODO: More details on this (talk to Ed)
+
 ---
 
 ## Bug Fixes
-[Here you can find a list of the bug fixes included in casper v2.0](./bug-fixes.md)
+
+Here you can find a [list](./bug-fixes.md) of the bug fixes included in Casper v2.0.
+
 ---
 
 ### Deprecations
@@ -96,6 +134,7 @@ The get_state_item RPC endpoint, while not yet deprecated, will be deprecated in
 
 ### Upcoming Features/updates
 - Activation of the Contract/Account unification feature.
+- Activation of Virtual Machine 2.0.
 - Deprecation of the get_state_item endpoint.
 
 ---
